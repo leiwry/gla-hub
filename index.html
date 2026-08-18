@@ -1,0 +1,1746 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0WG2XH9048"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-0WG2XH9048');
+    </script>
+
+    <meta charset="UTF-8" />
+    <title data-lang="title">GLA Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <!-- Resource hints — establish CDN sockets in parallel with HTML parse -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
+    <!-- Theme color drives the iOS Safari status-bar tint to match the page -->
+    <meta name="theme-color" content="#2a1a0e" />
+    <meta name="color-scheme" content="dark" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="sprites/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="sprites/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="sprites/favicon/favicon-16x16.png" />
+    <link rel="shortcut icon" href="sprites/favicon/favicon.ico" />
+    <link rel="manifest" href="sprites/favicon/site.webmanifest" />
+
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/groups.css" />
+    <link rel="stylesheet" href="css/cards.css" />
+    <link rel="stylesheet" href="css/tables.css" />
+    <link rel="stylesheet" href="css/ui.css" />
+    <link rel="stylesheet" href="css/recipes.css" />
+    <link rel="stylesheet" href="css/chest.css" />
+    <link rel="stylesheet" href="css/boost.css" />
+    <link rel="stylesheet" href="css/xp.css" />
+    <link rel="stylesheet" href="css/characters.css" />
+    <link rel="stylesheet" href="css/boats.css" />
+    <link rel="stylesheet" href="css/wanted.css" />
+    <link rel="stylesheet" href="css/tierlist.css" />
+    <link rel="stylesheet" href="css/links.css" />
+    <link rel="stylesheet" href="css/world_bosses.css" />
+    <link rel="stylesheet" href="css/marineford.css" />
+    <link rel="stylesheet" href="css/weekly_bosses.css" />
+    <link rel="stylesheet" href="css/foxy_quiz.css" />
+    <link rel="stylesheet" href="css/island_chests.css" />
+    <link rel="stylesheet" href="css/tracker.css" />
+    <link rel="stylesheet" href="css/weekly_chest.css" />
+    <link rel="stylesheet" href="css/profiles.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css" />
+  </head>
+
+  <body>
+    <button id="mobile-menu-toggle" class="mobile-menu-toggle" type="button" onclick="toggleMobileMenu()" aria-label="Menu" aria-controls="sidebar" aria-expanded="false" title="Menu">☰</button>
+    <div id="mobile-menu-backdrop" class="mobile-menu-backdrop" onclick="closeMobileMenu()" aria-hidden="true"></div>
+    <div class="app">
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-top">
+          <div class="sidebar-logo">
+            <img class="logo-icon" src="sprites/branding/logo_0.png" alt="logo">
+            <span class="logo-text">Labophase</span>
+          </div>
+          <button id="profile-sidebar-btn" class="profile-sidebar-btn" type="button" onclick="openProfileModal()">
+            <span id="profile-btn-icon" class="profile-btn-icon">👤</span>
+            <span class="profile-btn-meta">
+              <span id="profile-btn-title" class="profile-btn-title" data-lang="profileBtn">Perfil</span>
+              <span id="profile-btn-name" class="profile-btn-name">default</span>
+            </span>
+            <span id="profile-btn-color" class="profile-btn-color" aria-hidden="true"></span>
+          </button>
+          <div class="langSelector">
+            <div class="langButtons">
+              <button class="langBtn" type="button" data-lang="en" aria-label="English" onclick="setLang('en')">🇬🇧</button>
+              <button class="langBtn" type="button" data-lang="pt" aria-label="Português" onclick="setLang('pt')">🇧🇷</button>
+              <button class="langBtn" type="button" data-lang="es" aria-label="Español" onclick="setLang('es')">🇪🇸</button>
+              <button class="langBtn" type="button" data-lang="pl" aria-label="Polski" onclick="setLang('pl')">🇵🇱</button>
+            </div>
+          </div>
+          <div class="themeSelector">
+            <div id="theme-preview" class="themePreview" aria-label="Preview dos temas"></div>
+          </div>
+          <button class="sidebar-toggle" onclick="toggleSidebar()" title="Recolher/Expandir menu" aria-label="Recolher menu">
+            <span class="sidebar-toggle-arrow">◀</span>
+          </button>
+
+          <button class="tabBtn active" onclick="switchTab('calc', this)">
+            <span class="tab-icon"><img src="sprites/icons/divine_crystal.gif" class="tab-icon-img" alt="Cristal Divino"></span><span class="tab-label" data-lang="calculator"></span>
+          </button>
+          <button class="tabBtn" onclick="switchTab('receitas', this)">
+            <span class="tab-icon"><img src="sprites/recipes/shrimp_paella.png" class="tab-icon-img" alt="Paella de Camarão"></span><span class="tab-label" data-lang="recipes"></span>
+          </button>
+          <button class="tabBtn" onclick="switchTab('chest', this)">
+            <span class="tab-icon"><img id="ch-tab-icon" src="sprites/chestpuzzle/closed_relic.png" class="tab-icon-img" alt="Baú"></span><span class="tab-label" data-lang="chest"></span>
+          </button>
+          <button class="tabBtn" onclick="switchTab('boost', this)">
+            <span class="tab-icon"><img src="sprites/icons/radiant_crystal.gif" class="tab-icon-img" alt="Cristal Radiante"></span><span class="tab-label" data-lang="boost">Boost</span>
+          </button>
+          <button class="tabBtn" onclick="switchTab('xp', this)">
+            <span class="tab-icon"><img src="sprites/xp/large_xp_pot.png" class="tab-icon-img" alt="Pot de XP Grande"></span><span class="tab-label" data-lang="xpTab">Calculadora XP</span>
+          </button>
+          <button class="tabBtn" onclick="switchTab('characters', this)">
+            <span class="tab-icon"><img src="sprites/characters/monkey_luffy.png" class="tab-icon-img" alt="Luffy"></span><span class="tab-label" data-lang="charactersTab">Personagens</span>
+          </button>
+          <button class="tabBtn" onclick="switchTab('foxy_quiz', this)">
+            <span class="tab-icon"><img src="sprites/ui/foxy_quiz/foxy_quiz_icon.png" class="tab-icon-img" alt="Foxy Quiz"></span><span class="tab-label" data-lang="foxyQuizTab">Foxy Quiz</span>
+          </button>
+          <button class="tabBtn" onclick="switchTab('tracker', this)">
+            <span class="tab-icon">📌</span><span class="tab-label" data-lang="trackerTab">Tracker</span>
+          </button>
+          <button class="tabBtn" onclick="switchTab('island_chests', this)">
+            <span class="tab-icon">🗺️</span><span class="tab-label" data-lang="islandChestsTab">Island Chests</span>
+          </button>
+          <button class="tabBtn" onclick="switchTab('weekly_chest', this)">
+            <span class="tab-icon"><img src="sprites/ui/chests/chest.png" class="tab-icon-img" alt="Baú Semanal"></span><span class="tab-label" data-lang="wcTab">Baú Semanal</span>
+          </button>
+          <button class="tabBtn" onclick="switchTab('boats', this)">
+            <span class="tab-icon"><img src="sprites/boats/skins/boat_classic.png" class="tab-icon-img" alt="Barco"></span><span class="tab-label" data-lang="boatsTab">Barcos</span>
+          </button>
+          <button class="tabBtn" onclick="switchTab('wanted', this)">
+            <span class="tab-icon">🏴‍☠️</span><span class="tab-label" data-lang="wantedTab">Wanted Pirates</span>
+          </button>
+          <button class="tabBtn" onclick="switchTab('tierlist', this)">
+            <span class="tab-icon">📊</span><span class="tab-label" data-lang="tierlistTab">Tierlist</span>
+          </button>
+          <button class="tabBtn" onclick="switchTab('links', this)">
+            <span class="tab-icon">🔗</span><span class="tab-label" data-lang="usefulLinksTab">Links Úteis</span>
+          </button>
+
+          <!-- Marineford folder -->
+          <button class="wb-folder-btn" type="button" onclick="mfToggleFolder(this)" aria-expanded="false" aria-controls="mf-folder-submenu">
+            <span class="tab-icon"><img src="sprites/marineford/marineford.png" class="tab-icon-img" alt="Marineford"></span>
+            <span class="tab-label" data-lang="marinefordFolder">Marineford</span>
+            <span class="wb-folder-arrow">▶</span>
+          </button>
+          <div id="mf-folder-submenu" class="wb-folder-submenu">
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mf_general', this)">
+              <span class="tab-icon">📋</span>
+              <span class="tab-label" data-lang="mfGeneralConcepts">Conceitos Gerais</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mf_bastille', this)">
+              <span class="tab-icon"><img src="sprites/characters/bastille.png" class="tab-icon-img" alt="Bastille"></span>
+              <span class="tab-label">Bastille</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mf_brannew', this)">
+              <span class="tab-icon"><img src="sprites/tracker/marineford/brannew_boss.png" class="tab-icon-img" alt="Brannew"></span>
+              <span class="tab-label">Brannew</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mf_dalmatian', this)">
+              <span class="tab-icon"><img src="sprites/characters/dalmatian.png" class="tab-icon-img" alt="Dalmatian"></span>
+              <span class="tab-label">Dalmatian</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mf_hina', this)">
+              <span class="tab-icon"><img src="sprites/characters/hina.png" class="tab-icon-img" alt="Hina"></span>
+              <span class="tab-label">Hina</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mf_jango', this)">
+              <span class="tab-icon"><img src="sprites/characters/jango.png" class="tab-icon-img" alt="Jango"></span>
+              <span class="tab-label">Jango</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mf_moria', this)">
+              <span class="tab-icon"><img src="sprites/characters/gecko_moria.png" class="tab-icon-img" alt="Moria"></span>
+              <span class="tab-label">Moria</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mf_smoker', this)">
+              <span class="tab-icon"><img src="sprites/characters/smoker.png" class="tab-icon-img" alt="Smoker"></span>
+              <span class="tab-label">Smoker</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mf_tashigi', this)">
+              <span class="tab-icon"><img src="sprites/characters/tashigi.png" class="tab-icon-img" alt="Tashigi"></span>
+              <span class="tab-label">Tashigi</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mf_aokiji', this)">
+              <span class="tab-icon"><img src="sprites/characters/aokiji.png" class="tab-icon-img" alt="Aokiji"></span>
+              <span class="tab-label">Aokiji</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mf_doflamingo', this)">
+              <span class="tab-icon"><img src="sprites/characters/doflamingo.png" class="tab-icon-img" alt="Doflamingo"></span>
+              <span class="tab-label">Doflamingo</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mf_kizaru', this)">
+              <span class="tab-icon"><img src="sprites/characters/borsalino_kizaru.png" class="tab-icon-img" alt="Kizaru"></span>
+              <span class="tab-label">Kizaru</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mf_mihawk', this)">
+              <span class="tab-icon"><img src="sprites/characters/dracule_mihawk.png" class="tab-icon-img" alt="Mihawk"></span>
+              <span class="tab-label">Mihawk</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mf_akainu', this)">
+              <span class="tab-icon"><img src="sprites/characters/akainu.png" class="tab-icon-img" alt="Akainu"></span>
+              <span class="tab-label">Akainu</span>
+            </button>
+          </div>
+
+          <!-- World Bosses folder -->
+          <button class="wb-folder-btn" type="button" onclick="wbToggleFolder(this)" aria-expanded="false" aria-controls="wb-folder-submenu">
+            <span class="tab-icon">🌍</span>
+            <span class="tab-label" data-lang="worldBossesFolder">World Bosses</span>
+            <span class="wb-folder-arrow">▶</span>
+          </button>
+          <div id="wb-folder-submenu" class="wb-folder-submenu">
+            <button class="tabBtn wb-child-tab" onclick="switchTab('shai_hulud', this)">
+              <span class="tab-icon"><img src="sprites/world_bosses/shai_hulud/top_1_icon.gif" class="tab-icon-img" alt="Shai-Hulud"></span>
+              <span class="tab-label" data-lang="wbBossTitleShai">Shai-Hulud</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('mihawk', this)">
+              <span class="tab-icon"><img src="sprites/world_bosses/mihawk/top_1_icon.gif" class="tab-icon-img" alt="Mihawk"></span>
+              <span class="tab-label" data-lang="wbBossTitleMihawk">Mihawk</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('hiking_bear', this)">
+              <span class="tab-icon"><img src="sprites/world_bosses/hiking_bear/top_1_icon.gif" class="tab-icon-img" alt="Hiking Bear"></span>
+              <span class="tab-label" data-lang="wbBossTitleHikingBear">Hiking Bear</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('byakko', this)">
+              <span class="tab-icon"><img src="sprites/world_bosses/byakko/top_1_icon.gif" class="tab-icon-img" alt="Byakko"></span>
+              <span class="tab-label" data-lang="wbBossTitleByakko">Byakko</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('bananawani', this)">
+              <span class="tab-icon"><img src="sprites/world_bosses/bananawani/top_1_icon.gif" class="tab-icon-img" alt="Bananawani"></span>
+              <span class="tab-label" data-lang="wbBossTitleBananawani">Bananawani</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('plesiosaur', this)">
+              <span class="tab-icon"><img src="sprites/world_bosses/plesiosaur/top_1_icon.gif" class="tab-icon-img" alt="Plesiosaur"></span>
+              <span class="tab-label" data-lang="wbBossTitlePlesiosaur">Plesiosaur</span>
+            </button>
+            <button class="tabBtn wb-child-tab" onclick="switchTab('aokiji', this)">
+              <span class="tab-icon"><img src="sprites/world_bosses/aokiji/top_1_icon_aokiji.gif" class="tab-icon-img" alt="Aokiji"></span>
+              <span class="tab-label" data-lang="wbBossTitleAokiji">Aokiji</span>
+            </button>
+          </div>
+
+          <!-- Weekly Bosses folder -->
+          <button class="wb-folder-btn" type="button" onclick="wkbToggleFolder(this)" aria-expanded="false" aria-controls="wkb-folder-submenu">
+            <span class="tab-icon">⚔️</span>
+            <span class="tab-label" data-lang="weeklyBossesFolder">Weekly Bosses</span>
+            <span class="wb-folder-arrow">▶</span>
+          </button>
+          <div id="wkb-folder-submenu" class="wb-folder-submenu">
+            <button class="tabBtn wb-child-tab" onclick="switchTab('wkb_general', this)">
+              <span class="tab-icon">📋</span>
+              <span class="tab-label" data-lang="wkbGeneralConcepts">Conceitos Gerais</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar-bottom">
+          <footer class="sidebar-footer">
+            <span class="footer-dev">desenvolvido por maniackrackjack</span>
+            <button id="update-warning-reopen" class="update-warning-reopen" type="button" aria-label="Mostrar aviso" title="Mostrar aviso" hidden>⚠️</button>
+            <a href="https://discord.com/users/170132530136088576" target="_blank" rel="noopener noreferrer" class="discord-link" aria-label="Discord">
+              <svg class="discord-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.012.044.027.06a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+            </a>
+            <a href="https://www.twitch.tv/maniackrackjack/" target="_blank" rel="noopener noreferrer" class="twitch-link" aria-label="Twitch">
+              <svg class="twitch-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 2h18v12l-5 5h-4l-3 3H6v-3H3V2zm2 2v11h3v3l3-3h5l3-3V4H5zm5 2h2v5h-2V6zm5 0h2v5h-2V6z"/></svg>
+            </a>
+          </footer>
+        </div>
+      </div>
+
+      <div class="content">
+        <div id="calc" class="tabPanel">
+          <div class="panel">
+            <div class="calc-subtabs" role="tablist" aria-label="Divine Crystal views">
+              <button type="button" id="calc-subtab-btn-calculator" class="calc-subtab-btn active" data-subtab="calculator" role="tab" aria-controls="calc-subtab-calculator" aria-selected="true" onclick="switchCalcSubTab('calculator', this)">
+                <img src="sprites/icons/divine_crystal.gif" class="tab-icon-img subtab-icon-img" alt="">
+                <span data-lang="calculator">Cristais Divino</span>
+              </button>
+              <button type="button" id="calc-subtab-btn-tables" class="calc-subtab-btn" data-subtab="tables" role="tab" aria-controls="calc-subtab-tables" aria-selected="false" onclick="switchCalcSubTab('tables', this)">
+                <img src="sprites/xp/diamond_tier.png" class="tab-icon-img subtab-icon-img" alt="">
+                <span data-lang="tables">Tabelas de Combinação</span>
+              </button>
+            </div>
+
+            <div id="calc-subtab-calculator" class="calc-subtab-panel active" role="tabpanel">
+              <h3 data-lang="calculator">Cristais Divino</h3>
+
+              <div class="grid">
+              <div class="itemBtn" onclick="addItem('chapeu')">
+                <img src="sprites/icons/head/pirate_explorer_hat.gif" /><br /><span data-lang="hat"
+                  >Chapéu</span
+                >
+              </div>
+
+              <div class="itemBtn" onclick="addItem('camisa')">
+                <img src="sprites/icons/body/pirate_explorer_shirt.gif" /><br /><span data-lang="shirt"
+                  >Camisa</span
+                >
+              </div>
+
+              <div class="itemBtn" onclick="addItem('calca')">
+                <img src="sprites/icons/legs/pirate_explorer_pants.gif" /><br /><span data-lang="pants"
+                  >Calça</span
+                >
+              </div>
+
+              <div class="itemBtn" onclick="addItem('emblema')">
+                <img src="sprites/icons/emblem/pirate_explorer_emblem.gif" /><br /><span data-lang="emblem"
+                  >Emblema</span
+                >
+              </div>
+
+              <div class="itemBtn" onclick="addItem('sabre')">
+                <img src="sprites/icons/weapon/pirate_explorer_saber.gif" /><br /><span data-lang="weapon"
+                  >Arma</span
+                >
+              </div>
+
+              <div class="itemBtn" onclick="addItem('colar')">
+                  <img src="sprites/icons/accessory/pirate_explorer_necklace.gif" class="img1" />
+                  <img src="sprites/icons/accessory/pirate_explorer_ring.gif" class="img2" /><br />
+                  <span data-lang="accessory">Acessório</span>
+                </div>
+              </div>
+
+              <div class="buttons">
+              <button class="setBtn" data-lang="fullSet" onclick="addFullSet()">
+                Adicionar Set Completo
+              </button>
+
+              <button class="saveBtn" data-lang="createGroup" onclick="createGroupFromUI()">
+                Criar grupo
+              </button>
+
+              <button class="shareBtn" data-lang="shareBuild" onclick="shareBuild()">
+                Compartilhar
+              </button>
+
+              <button class="clearBtn" data-lang="clear" onclick="clearBuild()">
+                Limpar
+              </button>
+              </div>
+
+              <div id="itemsArea"></div>
+
+              <div id="summary">
+              <span data-lang="totalCrystals">Cristais totais necessários</span
+              >: <span id="totalCrystalsValue">0</span>
+              </div>
+            </div>
+
+            <div id="calc-subtab-tables" class="calc-subtab-panel" role="tabpanel" style="display: none">
+              <h3 data-lang="tables">Tabelas de Combinação</h3>
+              <div id="tablesArea"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="receitas" class="tabPanel" style="display: none">
+          <div id="receitas-inner">
+            <div id="r-recipe-list">
+              <div id="r-recipe-list-container"></div>
+            </div>
+            <div id="r-recipe-details">
+              <h2 id="r-recipe-name" data-lang-recipes="ui.selectRecipe">Select a Recipe</h2>
+              <div id="r-recipe-meta-line">
+                <span id="r-recipe-level" class="r-small-muted"></span>
+                <span id="r-recipe-cooldown" class="r-small-muted"></span>
+              </div>
+              <div id="r-ingredients-list"></div>
+            </div>
+            <div id="r-calc-panel">
+              <div class="r-panel-box">
+                <span data-lang-recipes="ui.qtyLabel">📦 Quantity (1–100)</span>
+                <input type="number" id="r-qty" min="1" max="100" placeholder="1–100" />
+              </div>
+              <div class="r-panel-box">
+                <span data-lang-recipes="ui.unitCostLabel">⚙️ Unit cost</span>
+                <strong id="r-unit-cost">฿ 0</strong>
+              </div>
+              <div class="r-panel-box">
+                <span data-lang-recipes="ui.sellPriceLabel">💰 Sell price</span>
+                <input type="number" id="r-sell-price" min="0" max="999999" value="0" step="1" />
+              </div>
+              <div class="r-panel-box">
+                <span data-lang-recipes="ui.totalCostLabel">🧮 Total cost</span>
+                <strong id="r-total-cost">฿ 0</strong>
+              </div>
+              <div class="r-panel-box">
+                <span>🧾 Taxa (3%)</span>
+                <strong id="r-fee">฿ 0</strong>
+              </div>
+              <div class="r-panel-box">
+                <span data-lang-recipes="ui.profitLabel">🤑 Profit</span>
+                <strong id="r-profit" class="r-profit">฿ 0</strong>
+              </div>
+              <div class="r-panel-box">
+                <span data-lang-recipes="ui.cookTimeLabel">⏱️ Cook time</span>
+                <strong id="r-prod-time">0 min</strong>
+              </div>
+              <div class="r-panel-box">
+                <span data-lang-recipes="ui.bagSlotsLabel">🎒 Bag slots</span>
+                <strong id="r-bag-slots">0</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="chest" class="tabPanel" style="display: none">
+          <div class="panel">
+            <h3 id="ch-title" data-lang="chestTitle">Puzzle das 8 Tochas</h3>
+
+            <div id="ch-sprite-switch" role="group" aria-label="Sistema de sprites">
+              <span class="ch-sprite-label">Sprites:</span>
+              <button id="ch-sprite-drakantos" class="ch-system-btn" type="button">Drakantos</button>
+              <button id="ch-sprite-gla" class="ch-system-btn" type="button">GLA</button>
+            </div>
+
+            <div id="ch-area-wrap">
+              <div id="ch-area">
+                <div id="ch-bau"></div>
+              </div>
+            </div>
+
+            <div id="ch-actions">
+              <button id="ch-mode-btn" class="ch-btn">
+                <span data-lang="chestMode">Modo</span>: <span id="ch-mode-label"></span>
+              </button>
+              <button id="ch-solve-btn" class="ch-btn" data-lang="chestSolve">Resolver</button>
+              <button id="ch-reset-btn" class="ch-btn" data-lang="chestReset">Resetar</button>
+              <button id="ch-random-btn" class="ch-btn" data-lang="chestRandom">Aleatório</button>
+            </div>
+
+            <div id="ch-result"></div>
+            <ol id="ch-steps"></ol>
+          </div>
+        </div>
+
+        <div id="boost" class="tabPanel" style="display: none">
+          <div class="panel boost-panel">
+            <h3 data-lang="boost">Boost</h3>
+            <p class="boost-subtitle" data-lang="boostSubtitle">Calcule cristais de boost e custo em ฿ do +0 ao +16 (com chance e pity).</p>
+
+            <div class="boost-grid">
+              <section class="boost-box boost-box-level">
+                <h4 data-lang="boostLevelTitle">Nivel de Boost</h4>
+                <div class="boost-actions">
+                  <button class="setBtn" type="button" id="boost-add-item-btn" data-lang="addItem">Adicionar item</button>
+                  <button class="setBtn" type="button" id="boost-full-set-btn" data-lang="fullSet" data-lang-title="boostFullSetTitle" title="Preenche 1 item em cada categoria base">Set completo</button>
+                  <button class="setBtn" type="button" id="boost-import-current-btn" data-lang="boostImportCurrent">Importar calculadora</button>
+                </div>
+
+                <div class="boost-actions">
+                  <button class="clearBtn" type="button" id="boost-clear-items-btn" data-lang="boostClearItems" data-lang-title="boostClearItemsTitle" title="Remove todos os itens da lista">Limpar itens</button>
+                </div>
+              </section>
+
+              <section class="boost-box boost-box-prices">
+                <h4 data-lang="boostCrystalPriceTitle">Cristais de Boost (฿)</h4>
+                <div class="boost-price-list">
+                  <label class="boost-price-item" for="boost-price-sky"><img src="sprites/icons/sky_crystal.gif" alt="Cristal do Ceu" data-lang-alt="boostCrystalSky" /><span data-lang="boostCrystalSky">Cristal do Ceu</span></label>
+                  <input id="boost-price-sky" type="number" min="0" step="1" value="0" data-lang-title="boostPriceSkyTitle" title="Preco unitario do Cristal do Ceu" />
+
+                  <label class="boost-price-item" for="boost-price-sage"><img src="sprites/icons/sage_crystal.gif" alt="Cristal do Sabio" data-lang-alt="boostCrystalSage" /><span data-lang="boostCrystalSage">Cristal do Sabio</span></label>
+                  <input id="boost-price-sage" type="number" min="0" step="1" value="0" data-lang-title="boostPriceSageTitle" title="Preco unitario do Cristal do Sabio" />
+
+                  <label class="boost-price-item" for="boost-price-crimson"><img src="sprites/icons/crimson_crystal.gif" alt="Cristal Carmesim" data-lang-alt="boostCrystalCrimson" /><span data-lang="boostCrystalCrimson">Cristal Carmesim</span></label>
+                  <input id="boost-price-crimson" type="number" min="0" step="1" value="0" data-lang-title="boostPriceCrimsonTitle" title="Preco unitario do Cristal Carmesim" />
+
+                  <label class="boost-price-item" for="boost-price-radiant"><img src="sprites/icons/radiant_crystal.gif" alt="Cristal Radiante" data-lang-alt="boostCrystalRadiant" /><span data-lang="boostCrystalRadiant">Cristal Radiante</span></label>
+                  <input id="boost-price-radiant" type="number" min="0" step="1" value="0" data-lang-title="boostPriceRadiantTitle" title="Preco unitario do Cristal Radiante" />
+                </div>
+
+                <h4 data-lang="boostInventoryTitle">Cristais no inventario (abater)</h4>
+                <div class="boost-stock-list">
+                  <label class="boost-price-item" for="boost-stock-sky"><img src="sprites/icons/sky_crystal.gif" alt="Cristal do Ceu" data-lang-alt="boostCrystalSky" /><span data-lang="boostCrystalSky">Cristal do Ceu</span></label>
+                  <input id="boost-stock-sky" type="number" min="0" step="1" value="0" />
+
+                  <label class="boost-price-item" for="boost-stock-sage"><img src="sprites/icons/sage_crystal.gif" alt="Cristal do Sabio" data-lang-alt="boostCrystalSage" /><span data-lang="boostCrystalSage">Cristal do Sabio</span></label>
+                  <input id="boost-stock-sage" type="number" min="0" step="1" value="0" />
+
+                  <label class="boost-price-item" for="boost-stock-crimson"><img src="sprites/icons/crimson_crystal.gif" alt="Cristal Carmesim" data-lang-alt="boostCrystalCrimson" /><span data-lang="boostCrystalCrimson">Cristal Carmesim</span></label>
+                  <input id="boost-stock-crimson" type="number" min="0" step="1" value="0" />
+
+                  <label class="boost-price-item" for="boost-stock-radiant"><img src="sprites/icons/radiant_crystal.gif" alt="Cristal Radiante" data-lang-alt="boostCrystalRadiant" /><span data-lang="boostCrystalRadiant">Cristal Radiante</span></label>
+                  <input id="boost-stock-radiant" type="number" min="0" step="1" value="0" />
+                </div>
+              </section>
+
+              <section class="boost-box boost-box-items">
+                <h4 data-lang="boostItemsTitle">Itens</h4>
+                <div class="boost-item-head">
+                  <span data-lang="boostItemIcon">Icone</span>
+                  <span data-lang="boostItemType">Item</span>
+                  <span data-lang="boostVariant">Variante</span>
+                  <span data-lang="boostCurrent">Boost atual</span>
+                  <span data-lang="boostTarget">Boost alvo</span>
+                  <span></span>
+                </div>
+                <div id="boost-items-list" class="boost-items-list"></div>
+              </section>
+            </div>
+
+            <div class="boost-results">
+              <div class="boost-result-box">
+                <h4 data-lang="boostPityTitle">Consumo Maximo (pity)</h4>
+                <div id="boost-pity-breakdown" class="boost-breakdown"></div>
+                <div class="boost-total" id="boost-pity-total-berries-line">Custo: <strong id="boost-pity-total-berries">฿ 0</strong></div>
+              </div>
+            </div>
+
+            <div class="boost-table-wrap">
+              <table class="boost-table">
+                <thead>
+                  <tr>
+                    <th data-lang="boostTableLevel">Boost</th>
+                    <th data-lang="boostTableCrystal">Cristal</th>
+                    <th data-lang="boostTableChances">Chances (%)</th>
+                    <th data-lang="boostTableAttempts">Tentativas (pity)</th>
+                    <th data-lang="boostTablePity">Cristais maximos</th>
+                    <th data-lang="boostTableBerriesCost">฿ por tentativa</th>
+                  </tr>
+                </thead>
+                <tbody id="boost-level-rows"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="xp" class="tabPanel" style="display: none">
+          <div class="panel xp-panel">
+            <h3 data-lang="xpTab">Calculadora XP</h3>
+            <p class="xp-subtitle" data-lang="xpSubtitle">Calcule quantas poções de XP são necessárias para atingir o nível desejado.</p>
+
+            <div class="xp-grid">
+              <section class="xp-box">
+                <h4 data-lang="xpTierTitle">Tier do Personagem</h4>
+                <div id="xp-tier-stars" class="xp-tier-stars"></div>
+              </section>
+
+              <section class="xp-box">
+                <h4 data-lang="xpInputTitle">Dados Atuais</h4>
+
+                <div class="xp-row">
+                  <label for="xp-level-current" data-lang="xpCurrentLevel">Nível atual</label>
+                  <input id="xp-level-current" type="number" min="1" max="140" step="1" value="1" />
+                </div>
+
+                <div class="xp-row">
+                  <label for="xp-percent-current" data-lang="xpCurrentPercent">XP atual (%)</label>
+                  <input id="xp-percent-current" type="number" min="0" max="100" step="1" value="0" />
+                </div>
+
+                <div class="xp-row">
+                  <label for="xp-level-target" data-lang="xpTargetLevel">Nível desejado</label>
+                  <input id="xp-level-target" type="number" min="2" max="140" step="1" value="2" />
+                </div>
+
+                <div class="xp-actions">
+                  <button class="clearBtn" type="button" id="xp-clear-btn" data-lang="clear">Limpar</button>
+                </div>
+              </section>
+            </div>
+
+            <div class="xp-box" style="margin-top: 10px">
+              <h4 data-lang="xpResultTitle">Poções Necessárias</h4>
+              <div id="xp-result-note" class="xp-note"></div>
+              <div id="xp-result-list" class="xp-result-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="characters" class="tabPanel" style="display: none">
+          <div class="panel characters-panel">
+            <div class="characters-title-row">
+              <div>
+                <h3 data-lang="charactersTab">Personagens</h3>
+                <p class="characters-subtitle" data-lang="charactersSubtitle">Ative personagens, ajuste nível, estrelas e tier, e salve junto do build.</p>
+              </div>
+              <div class="characters-title-actions">
+                <div id="characters-summary" class="characters-summary">0 / 0</div>
+                <button class="shareBtn" id="characters-unlock-all-btn" type="button" data-lang="charactersUnlockAll">Liberar todos</button>
+                <button class="shareBtn" onclick="shareBuild()" data-lang="shareBuild">Compartilhar</button>
+              </div>
+            </div>
+
+            <div class="characters-filter-bar">
+              <div class="characters-filter-field characters-filter-search">
+                <label for="characters-search" data-lang="charactersSearchLabel">Pesquisar</label>
+                <input id="characters-search" type="text" />
+              </div>
+
+              <div class="characters-filter-field">
+                <span class="characters-filter-label" data-lang="charactersRoleFilter">Classe</span>
+                <div class="characters-filter-toggles">
+                  <button type="button" class="characters-filter-toggle" data-characters-role-toggle="Melee" title="Melee">
+                    <img src="sprites/icons_classes/icon_fighter.png" alt="Melee" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-role-toggle="Ranged" title="Ranged">
+                    <img src="sprites/icons_classes/icon_shooter.png" alt="Ranged" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-role-toggle="Tank" title="Tank">
+                    <img src="sprites/icons_classes/icon_tank.png" alt="Tank" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-role-toggle="Support" title="Support">
+                    <img src="sprites/icons_classes/icon_support.png" alt="Support" />
+                  </button>
+                </div>
+              </div>
+
+              <div class="characters-filter-field">
+                <span class="characters-filter-label" data-lang="charactersTierFilter">Tier</span>
+                <div class="characters-filter-toggles">
+                  <button type="button" class="characters-filter-toggle" data-characters-tier-toggle="bronze" title="Bronze">
+                    <img src="sprites/xp/bronze_tier.png" alt="Bronze" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-tier-toggle="silver" title="Prata">
+                    <img src="sprites/xp/silver_tier.png" alt="Prata" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-tier-toggle="gold" title="Ouro">
+                    <img src="sprites/xp/gold_tier.png" alt="Ouro" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-tier-toggle="diamond" title="Diamante">
+                    <img src="sprites/xp/diamond_tier.png" alt="Diamante" />
+                  </button>
+                </div>
+              </div>
+
+              <div class="characters-filter-field">
+                <span class="characters-filter-label" data-lang="charactersFactionFilter">Facção</span>
+                <div class="characters-filter-toggles">
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="tank" data-lang-title="charactersGroupTank" title="Tank">
+                    <img src="sprites/icons_classes/icon_tank.png" data-lang-alt="charactersGroupTank" alt="Tank" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="bruiser" data-lang-title="charactersGroupBruiser" title="Bruiser">
+                    <img src="sprites/icons_classes/icon_bruiser.png" data-lang-alt="charactersGroupBruiser" alt="Bruiser" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="dps" data-lang-title="charactersGroupDps" title="DPS">
+                    <img src="sprites/icons_classes/icon_dps.png" data-lang-alt="charactersGroupDps" alt="DPS" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="support" data-lang-title="charactersGroupSupport" title="Support">
+                    <img src="sprites/icons_classes/icon_support.png" data-lang-alt="charactersGroupSupport" alt="Support" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="fighter" data-lang-title="charactersGroupFighter" title="Fighter">
+                    <img src="sprites/icons_classes/icon_fighter.png" data-lang-alt="charactersGroupFighter" alt="Fighter" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="shooter" data-lang-title="charactersGroupShooter" title="Shooter">
+                    <img src="sprites/icons_classes/icon_shooter.png" data-lang-alt="charactersGroupShooter" alt="Shooter" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="slasher" data-lang-title="charactersGroupSlasher" title="Slasher">
+                    <img src="sprites/icons_classes/icon_slasher.png" data-lang-alt="charactersGroupSlasher" alt="Slasher" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="specialist" data-lang-title="charactersGroupSpecialist" title="Specialist">
+                    <img src="sprites/icons_classes/icon_specialist.png" data-lang-alt="charactersGroupSpecialist" alt="Specialist" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="marinheiro" data-lang-title="charactersGroupMarine" title="Marinha">
+                    <img src="sprites/icons_classes/icon_marine.png" data-lang-alt="charactersGroupMarine" alt="Marinha" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="supernova" data-lang-title="charactersGroupSupernova" title="Supernova">
+                    <img src="sprites/icons_classes/icon_supernova.png" data-lang-alt="charactersGroupSupernova" alt="Supernova" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="fruta_do_diabo" data-lang-title="charactersGroupDevilFruit" title="Fruta do Diabo">
+                    <img src="sprites/icons_classes/icon_devil_fruit.png" data-lang-alt="charactersGroupDevilFruit" alt="Fruta do Diabo" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="shichibukai" data-lang-title="charactersGroupShichibukai" title="Shichibukai">
+                    <img src="sprites/icons_classes/icon_shichibukai.png" data-lang-alt="charactersGroupShichibukai" alt="Shichibukai" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="realeza" data-lang-title="charactersGroupRoyalty" title="Realeza">
+                    <img src="sprites/icons_classes/icon_royal.png" data-lang-alt="charactersGroupRoyalty" alt="Realeza" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="chapeu_de_palha" data-lang-title="charactersGroupStrawHat" title="Chapeu de Palha">
+                    <img src="sprites/icons_classes/icon_strawhat.png" data-lang-alt="charactersGroupStrawHat" alt="Chapeu de Palha" />
+                  </button>
+                </div>
+              </div>
+
+              <div class="characters-filter-field">
+                <span class="characters-filter-label" data-lang="charactersMechanicsFilter">Mecanica</span>
+                <div class="characters-filter-toggles">
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="reducao_ataque" data-lang-title="charactersMechanicAttackReduction" title="Reducao de ataque">
+                    <img src="sprites/icons_classes/debuff_attack.png" data-lang-alt="charactersMechanicAttackReduction" alt="Reducao de ataque" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="ataque_invul" data-lang-title="charactersMechanicAttackInvul" title="Ataque com invul">
+                    <img src="sprites/icons_classes/231223.png" data-lang-alt="charactersMechanicAttackInvul" alt="Ataque com invul" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="buff_ataque" data-lang-title="charactersMechanicAttackBuff" title="Buff de ataque">
+                    <img src="sprites/icons_classes/buff_attack.png" data-lang-alt="charactersMechanicAttackBuff" alt="Buff de ataque" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="quebra_def" data-lang-title="charactersMechanicDefenseBreak" title="Quebra def">
+                    <img src="sprites/icons_classes/2.png" data-lang-alt="charactersMechanicDefenseBreak" alt="Quebra def" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="cria_ponte" data-lang-title="charactersMechanicBridgeCreate" title="Cria ponte">
+                    <img src="sprites/icons_classes/Untitled.png" data-lang-alt="charactersMechanicBridgeCreate" alt="Cria ponte" />
+                  </button>
+                  <button type="button" class="characters-filter-toggle" data-characters-group-toggle="quebra_parede" data-lang-title="charactersMechanicWallBreak" title="Quebra parede">
+                    <img src="sprites/icons_classes/wall.png" data-lang-alt="charactersMechanicWallBreak" alt="Quebra parede" />
+                  </button>
+                </div>
+              </div>
+
+              <div class="characters-filter-field characters-filter-stack-mobile">
+                <label for="characters-max-level-filter" data-lang="charactersMaxLevelFilter">Status de nível</label>
+                <select id="characters-max-level-filter">
+                  <option value="all" data-lang="charactersFilterAll">Todas</option>
+                  <option value="maxed" data-lang="charactersOnlyMaxed">Só 140</option>
+                  <option value="not_maxed" data-lang="charactersOnlyNotMaxed">Ainda não 140</option>
+                </select>
+              </div>
+
+              <div class="characters-filter-field characters-filter-stack-mobile">
+                <label for="characters-sort-filter" data-lang="charactersSortFilter">Classificar por</label>
+                <select id="characters-sort-filter">
+                  <option value="name_az" data-lang="charactersSortNameAZ">Nome (A-Z)</option>
+                  <option value="level_desc" data-lang="charactersSortLevelDesc">Nível (maior)</option>
+                  <option value="level_asc" data-lang="charactersSortLevelAsc">Nível (menor)</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="characters-grid" class="characters-grid"></div>
+          </div>
+        </div>
+
+        <div id="wanted" class="tabPanel" style="display: none">
+          <div class="panel wanted-panel">
+            <div class="wanted-title-row">
+              <h3 data-lang="wantedTitle">Wanted Pirates</h3>
+              <div class="wanted-credits">
+                <a href="https://www.twitch.tv/theplayerl0st" target="_blank" rel="noopener noreferrer" class="wanted-social-link" aria-label="Twitch ThePlayerLost" title="Twitch ThePlayerLost">
+                  <svg class="wanted-social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 2h18v12l-5 5h-4l-3 3H6v-3H3V2zm2 2v11h3v3l3-3h5l3-3V4H5zm5 2h2v5h-2V6zm5 0h2v5h-2V6z"/></svg>
+                </a>
+                <a href="https://www.youtube.com/theplayerlost" target="_blank" rel="noopener noreferrer" class="wanted-social-link" aria-label="YouTube ThePlayerLost" title="YouTube ThePlayerLost">
+                  <svg class="wanted-social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3.1 3.1 0 0 0-2.2-2.2C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.3.5A3.1 3.1 0 0 0 .5 6.2 32.6 32.6 0 0 0 0 12a32.6 32.6 0 0 0 .5 5.8 3.1 3.1 0 0 0 2.2 2.2c2 .5 9.3.5 9.3.5s7.3 0 9.3-.5a3.1 3.1 0 0 0 2.2-2.2A32.6 32.6 0 0 0 24 12a32.6 32.6 0 0 0-.5-5.8zM9.6 15.5V8.5l6.2 3.5-6.2 3.5z"/></svg>
+                </a>
+                <span data-lang="wantedCredits">Creditos ao ThePlayerLost pelas Match-ups</span>
+              </div>
+            </div>
+
+            <div class="wanted-subtabs" role="tablist" aria-label="Wanted views">
+              <button type="button" id="wanted-subtab-btn-matchups" class="wanted-subtab-btn active" data-wanted-subtab="matchups" role="tab" aria-controls="wanted-subtab-matchups" aria-selected="true" onclick="switchWantedSubTab('matchups', this)">
+                <span class="wanted-subtab-icon" aria-hidden="true">⚖️</span>
+                <span data-lang="wantedSubtabMatchups">Match-ups</span>
+              </button>
+              <button type="button" id="wanted-subtab-btn-rows" class="wanted-subtab-btn" data-wanted-subtab="rows" role="tab" aria-controls="wanted-subtab-rows" aria-selected="false" onclick="switchWantedSubTab('rows', this)">
+                <span class="wanted-subtab-icon" aria-hidden="true">📚</span>
+                <span data-lang="wantedSubtabRows">Wanted em linhas</span>
+              </button>
+            </div>
+
+            <div id="wanted-subtab-matchups" class="wanted-subtab-panel active" role="tabpanel">
+              <div class="wanted-search-row">
+                <label for="wanted-search-input" data-lang="wantedSearchLabel">Pesquisar Wanted Pirate</label>
+                <input id="wanted-search-input" type="text" />
+                <label for="wanted-sort-select" data-lang="wantedSortLabel">Ordenacao</label>
+                <select id="wanted-sort-select">
+                  <option value="az" data-lang="wantedSortAZ">A-Z</option>
+                  <option value="original" data-lang="wantedSortOriginal">Original</option>
+                </select>
+              </div>
+
+              <div class="wanted-table-wrap">
+                <table class="wanted-table">
+                  <thead id="wanted-table-head"></thead>
+                  <tbody id="wanted-table-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+
+            <div id="wanted-subtab-rows" class="wanted-subtab-panel" role="tabpanel" style="display: none">
+              <div class="wanted-rows-toolbar">
+                <label for="wanted-rows-target-select" class="wanted-tier-target-label" data-lang="wantedRowsAddWantedLabel">Adicionar Wanted</label>
+                <select id="wanted-rows-target-select"></select>
+                <button type="button" id="wanted-rows-add-btn" class="wanted-tier-btn" data-lang="wantedRowsAddWanted">Adicionar linha</button>
+                <button type="button" id="wanted-rows-clear-btn" class="wanted-tier-btn" data-lang="wantedRowsClear">Limpar linhas</button>
+                <button type="button" id="wanted-rows-reset-btn" class="wanted-tier-btn" data-lang="wantedRowsReset">Resetar linhas</button>
+              </div>
+
+              <div class="wanted-tier-layout wanted-rows-layout">
+                <div id="wanted-rows-board" class="wanted-tier-board"></div>
+                <aside class="wanted-tier-pool-wrap">
+                  <h4 data-lang="wantedTierPoolTitle">Pool de Counters</h4>
+                  <input id="wanted-rows-search-input" type="text" data-lang-title="wantedTierSearchPlaceholder" placeholder="Buscar no pool..." />
+                  <div id="wanted-rows-pool" class="wanted-tier-dropzone"></div>
+                </aside>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="tierlist" class="tabPanel" style="display: none">
+          <div class="panel wanted-panel">
+            <div class="wanted-tier-toolbar">
+              <div class="tierlist-select-group">
+                <label for="tierlist-category-select" class="wanted-tier-target-label" data-lang="tierlistCategoryLabel">Categoria</label>
+                <select id="tierlist-category-select">
+                  <option value="wanteds">Wanteds</option>
+                  <option value="worldbosses">Worldbosses</option>
+                  <option value="marineford">Marineford</option>
+                </select>
+                <label for="tierlist-enemy-select" class="wanted-tier-target-label" data-lang="tierlistEnemyLabel">Inimigo</label>
+                <select id="tierlist-enemy-select"></select>
+              </div>
+              <button type="button" id="tierlist-tier-clear-btn" class="wanted-tier-btn" data-lang="wantedTierClear">Limpar tiers</button>
+              <button type="button" id="tierlist-tier-reset-btn" class="wanted-tier-btn" data-lang="wantedTierReset">Resetar lista</button>
+              <button type="button" id="tierlist-tier-export-btn" class="wanted-tier-btn is-primary" data-lang="wantedTierExport">Salvar imagem</button>
+            </div>
+
+            <div class="wanted-tier-layout">
+              <div id="tierlist-tier-board" class="wanted-tier-board"></div>
+              <aside class="wanted-tier-pool-wrap">
+                <h4 data-lang="wantedTierPoolTitle">Pool de Counters</h4>
+                <input id="tierlist-tier-search-input" type="text" data-lang-placeholder="tierlistSearchPlaceholder" placeholder="Buscar no pool..." />
+                <div id="tierlist-tier-pool" class="wanted-tier-dropzone" data-tier="pool"></div>
+              </aside>
+            </div>
+          </div>
+        </div>
+
+        <div id="island_chests" class="tabPanel" style="display: none">
+          <div class="ic-layout">
+            <nav class="ic-sidebar" id="ic-island-list" aria-label="Island list"></nav>
+            <div class="ic-main">
+              <div id="ic-header"></div>
+              <div id="ic-chests-container">
+                <p class="ic-empty-msg" data-lang="islandChestsNoIslandSelected">Select an island to view its chests.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="foxy_quiz" class="tabPanel" style="display: none">
+          <div class="panel foxy-quiz-panel">
+            <div class="foxy-quiz-banner">
+            <img src="sprites/ui/foxy_quiz/foxy_quiz.png" alt="Foxy Quiz">
+            </div>
+            <div class="foxy-quiz-weekly-wrap">
+              <label class="foxy-quiz-weekly-label" for="foxy-quiz-weekly-checkbox">
+                <input type="checkbox" id="foxy-quiz-weekly-checkbox">
+                <span data-lang="foxyQuizWeeklyLabel">Atividade semanal concluída</span>
+              </label>
+              <small class="foxy-quiz-weekly-hint" data-lang="foxyQuizWeeklyHint">Reinicia toda sexta às 00:01 (horário local)</small>
+            </div>
+            <div class="foxy-quiz-search-wrap">
+              <input
+                type="text"
+                id="foxy-quiz-input"
+                class="foxy-quiz-input"
+                autocomplete="off"
+                spellcheck="false"
+              >
+            </div>
+            <div id="foxy-quiz-results" class="foxy-quiz-results"></div>
+          </div>
+        </div>
+
+        <div id="tracker" class="tabPanel" style="display: none">
+          <div class="panel tracker-panel">
+            <div class="tracker-title-row">
+              <div>
+                <h3 data-lang="trackerTitle">Tracker</h3>
+                <p class="tracker-subtitle" data-lang="trackerSubtitle">Acompanhe progresso semanal e concluido no seu perfil ativo.</p>
+              </div>
+            </div>
+
+            <div class="tracker-subtabs" role="tablist" aria-label="Tracker views">
+              <button type="button" id="tracker-subtab-btn-boss-rush" class="tracker-subtab-btn active" data-tracker-subtab="boss_rush" role="tab" aria-controls="tracker-subtab-boss-rush" aria-selected="true" onclick="switchTrackerSubTab('boss_rush', this)">
+                <span class="tracker-subtab-icon" aria-hidden="true">💥</span>
+                <span data-lang="trackerSubtabBossRush">Boss Rush</span>
+              </button>
+              <button type="button" id="tracker-subtab-btn-marineford" class="tracker-subtab-btn" data-tracker-subtab="marineford" role="tab" aria-controls="tracker-subtab-marineford" aria-selected="false" onclick="switchTrackerSubTab('marineford', this)">
+                <span class="tracker-subtab-icon" aria-hidden="true">⚔️</span>
+                <span data-lang="trackerSubtabMarineford">Marineford</span>
+              </button>
+              <button type="button" id="tracker-subtab-btn-foxy" class="tracker-subtab-btn" data-tracker-subtab="foxy" role="tab" aria-controls="tracker-subtab-foxy" aria-selected="false" onclick="switchTrackerSubTab('foxy', this)">
+                <span class="tracker-subtab-icon" aria-hidden="true">🦊</span>
+                <span data-lang="trackerSubtabFoxy">Eventos Foxy</span>
+              </button>
+              <button type="button" id="tracker-subtab-btn-one-man-army" class="tracker-subtab-btn" data-tracker-subtab="one_man_army" role="tab" aria-controls="tracker-subtab-one-man-army" aria-selected="false" onclick="switchTrackerSubTab('one_man_army', this)">
+                <span class="tracker-subtab-icon" aria-hidden="true">🏅</span>
+                <span data-lang="trackerSubtabOneManArmy">One Man Army</span>
+              </button>
+            </div>
+
+            <div id="tracker-subtab-boss-rush" class="tracker-subtab-panel active" role="tabpanel">
+              <section class="tracker-box">
+                <div class="tracker-box-head">
+                  <h4 data-lang="trackerBossRushModifiersTitle">Modificadores</h4>
+                  <span id="tracker-br-modifiers-progress" class="tracker-progress-badge">0 / 14</span>
+                </div>
+                <div id="tracker-br-modifiers-progressbar" class="tracker-progressbar" aria-hidden="true"><span></span></div>
+                <div id="tracker-br-modifiers-list" class="tracker-checkbox-list"></div>
+              </section>
+
+              <section class="tracker-box">
+                <div class="tracker-box-head">
+                  <h4 data-lang="trackerBossRushWavesTitle">Waves</h4>
+                  <div class="tracker-inline-actions">
+                    <button id="tracker-br-clear-waves" type="button" class="clearBtn" data-lang="trackerClearWaves">Limpar waves</button>
+                  </div>
+                </div>
+                <small class="tracker-weekly-hint" data-lang="trackerWeeklyHint">Reinicia toda sexta às 00:01 (horário local)</small>
+                <div id="tracker-br-waves-list" class="tracker-br-grid"></div>
+              </section>
+            </div>
+
+            <div id="tracker-subtab-marineford" class="tracker-subtab-panel" role="tabpanel" style="display: none">
+              <section class="tracker-box">
+                <div id="tracker-mf-kills"></div>
+              </section>
+              <div id="tracker-mf-sections" class="tracker-mf-sections"></div>
+            </div>
+
+            <div id="tracker-subtab-foxy" class="tracker-subtab-panel" role="tabpanel" style="display: none">
+              <small class="tracker-weekly-hint" data-lang="trackerWeeklyHint">Reinicia toda sexta às 00:01 (horário local)</small>
+              <div id="tracker-foxy-events" class="tracker-foxy-events"></div>
+            </div>
+
+            <div id="tracker-subtab-one-man-army" class="tracker-subtab-panel" role="tabpanel" style="display: none">
+              <div class="tracker-oma-toolbar">
+                <input id="tracker-oma-search" type="text" data-lang-title="trackerOmaSearchPlaceholder" placeholder="Pesquisar personagem..." />
+                <button id="tracker-oma-hide-done" type="button" class="setBtn" data-lang="trackerOmaHideDone">Ocultar concluidos</button>
+                <button id="tracker-oma-hide-not-done" type="button" class="setBtn" data-lang="trackerOmaHideNotDone">Ocultar nao concluidos</button>
+              </div>
+              <div class="tracker-box-head tracker-oma-head">
+                <h4 data-lang="trackerOmaTitle">One Man Army</h4>
+                <span id="tracker-oma-progress" class="tracker-progress-badge">0 / 0</span>
+              </div>
+              <div id="tracker-oma-list" class="tracker-oma-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="boats" class="tabPanel" style="display: none">
+          <div class="panel boats-panel">
+            <div>
+              <h3 data-lang="boatsTitle">Planejador de Barcos</h3>
+              <p class="boats-subtitle" data-lang="boatsSubtitle">Marque os equipamentos do arsenal e skins para ver materiais base, refino, construcao e custo em Berries.</p>
+            </div>
+
+            <section class="boats-section">
+              <div class="boats-section-head">
+                <div>
+                  <h4 data-lang="boatsArsenalTitle">Arsenal (Lv 6)</h4>
+                  <p class="boats-hint" data-lang="boatsArsenalHint">Marque o que deseja construir.</p>
+                </div>
+                <div class="boats-actions">
+                  <button type="button" data-boats-action="arsenal-all" data-lang="boatsSelectAll">Selecionar todos</button>
+                  <button type="button" data-boats-action="arsenal-clear" data-lang="boatsClearAll">Limpar</button>
+                </div>
+              </div>
+              <div id="boats-arsenal-grid" class="boats-grid"></div>
+            </section>
+
+            <section class="boats-section">
+              <div class="boats-section-head">
+                <div>
+                  <h4 data-lang="boatsSkinsTitle">Skins do Barco</h4>
+                  <p class="boats-hint" data-lang="boatsSkinsHint">Tintas nao sao compraveis na loja. Esta secao mostra so as quantidades.</p>
+                </div>
+                <div class="boats-actions">
+                  <button type="button" data-boats-action="skins-all" data-lang="boatsSelectAll">Selecionar todos</button>
+                  <button type="button" data-boats-action="skins-clear" data-lang="boatsClearAll">Limpar</button>
+                </div>
+              </div>
+              <div id="boats-skins-grid" class="boats-grid"></div>
+            </section>
+
+            <section>
+              <h4 data-lang="boatsSummaryTitle">Passo a passo</h4>
+              <div id="boats-summary" class="boats-summary"></div>
+            </section>
+          </div>
+        </div>
+
+        <div id="shai_hulud" class="tabPanel" style="display: none">
+          <div class="panel wb-panel">
+
+            <!-- Boss header -->
+            <div class="wb-boss-header">
+              <img src="sprites/world_bosses/shai_hulud/shai_icon.png" class="wb-boss-icon" alt="Shai-Hulud" />
+              <div>
+                <h3 class="wb-boss-title" data-lang="wbBossTitleShai">Shai-Hulud</h3>
+                <p class="wb-boss-subtitle" data-lang="wbBossSubtitle">World Boss</p>
+              </div>
+            </div>
+
+            <!-- Phase table section -->
+            <section class="wb-section">
+              <div class="wb-section-head">
+                <h4 data-lang="wbPhasesSkills">Fases &amp; Habilidades</h4>
+                <button id="wb-table-toggle" class="wb-toggle-btn" type="button" data-lang="wbModeSkills">Modo Habilidades</button>
+              </div>
+              <div class="wb-table-and-preview">
+                <div class="wb-table-outer">
+                  <div id="wb-table-wrap"></div>
+                </div>
+                <div class="wb-skill-preview">
+                  <img id="wb-skill-gif" class="wb-skill-gif" src="sprites/world_bosses/shai_hulud/basic_attack_shai.gif" alt="Habilidade" />
+                  <span id="wb-skill-label" class="wb-skill-label">Ataque Básico</span>
+                  <p id="wb-skill-description" class="wb-skill-description"></p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Characters + Rewards side by side -->
+            <div class="wb-bottom-section">
+              <section class="wb-section">
+                <div class="wb-section-head">
+                  <h4 data-lang="wbRecommendedCharacters">Personagens Recomendados</h4>
+                </div>
+                <div id="wb-characters"></div>
+              </section>
+              <section class="wb-section">
+                <div class="wb-section-head">
+                  <h4 data-lang="wbRewardsByDamage">Recompensas por Dano</h4>
+                </div>
+                <div id="wb-rewards"></div>
+              </section>
+            </div>
+
+          </div>
+        </div>
+
+        <div id="mihawk" class="tabPanel" style="display: none">
+          <div class="panel wb-panel">
+
+            <div class="wb-boss-header">
+              <img src="sprites/world_bosses/mihawk/mihawk_icon.png" class="wb-boss-icon" alt="Mihawk" />
+              <div>
+                <h3 class="wb-boss-title" data-lang="wbBossTitleMihawk">Mihawk</h3>
+                <p class="wb-boss-subtitle" data-lang="wbBossSubtitle">World Boss</p>
+              </div>
+            </div>
+
+            <section class="wb-section">
+              <div class="wb-section-head">
+                <h4 data-lang="wbPhasesSkills">Fases &amp; Habilidades</h4>
+                <button id="wb-table-toggle-mh" class="wb-toggle-btn" type="button" data-lang="wbModeSkills">Modo Habilidades</button>
+              </div>
+              <div class="wb-table-and-preview">
+                <div class="wb-table-outer">
+                  <div id="wb-table-wrap-mh"></div>
+                </div>
+                <div class="wb-skill-preview">
+                  <img id="wb-skill-gif-mh" class="wb-skill-gif" src="sprites/world_bosses/mihawk/mihawk_icon.png" alt="Habilidade" />
+                  <span id="wb-skill-label-mh" class="wb-skill-label">Teleporte</span>
+                  <p id="wb-skill-description-mh" class="wb-skill-description"></p>
+                </div>
+              </div>
+            </section>
+
+            <div class="wb-bottom-section">
+              <section class="wb-section">
+                <div class="wb-section-head">
+                  <h4 data-lang="wbRecommendedCharacters">Personagens Recomendados</h4>
+                </div>
+                <div id="wb-characters-mh"></div>
+              </section>
+              <section class="wb-section">
+                <div class="wb-section-head">
+                  <h4 data-lang="wbRewardsByDamage">Recompensas por Dano</h4>
+                </div>
+                <div id="wb-rewards-mh"></div>
+              </section>
+            </div>
+
+          </div>
+        </div>
+
+        <div id="hiking_bear" class="tabPanel" style="display: none">
+          <div class="panel wb-panel">
+
+            <div class="wb-boss-header">
+              <img src="sprites/world_bosses/hiking_bear/bear_icon.png" class="wb-boss-icon" alt="Hiking Bear" />
+              <div>
+                <h3 class="wb-boss-title" data-lang="wbBossTitleHikingBear">Hiking Bear</h3>
+                <p class="wb-boss-subtitle" data-lang="wbBossSubtitle">World Boss</p>
+              </div>
+            </div>
+
+            <section class="wb-section">
+              <div class="wb-section-head">
+                <h4 data-lang="wbPhasesSkills">Fases &amp; Habilidades</h4>
+                <button id="hb-table-toggle" class="wb-toggle-btn" type="button" data-lang="wbModeSkills">Modo Habilidades</button>
+              </div>
+              <div class="wb-table-and-preview">
+                <div class="wb-table-outer">
+                  <div id="hb-table-wrap"></div>
+                </div>
+                <div class="wb-skill-preview">
+                  <img id="hb-skill-gif" class="wb-skill-gif" src="sprites/world_bosses/hiking_bear/top_1_icon.gif" alt="Habilidade" />
+                  <span id="hb-skill-label" class="wb-skill-label">Ataque Básico</span>
+                  <p id="hb-skill-description" class="wb-skill-description"></p>
+                </div>
+              </div>
+            </section>
+
+            <div class="wb-bottom-section">
+              <section class="wb-section">
+                <div class="wb-section-head">
+                  <h4 data-lang="wbRecommendedCharacters">Personagens Recomendados</h4>
+                </div>
+                <div id="hb-characters"></div>
+              </section>
+              <section class="wb-section">
+                <div class="wb-section-head">
+                  <h4 data-lang="wbRewardsByDamage">Recompensas por Dano</h4>
+                </div>
+                <div id="hb-rewards"></div>
+              </section>
+            </div>
+
+          </div>
+        </div>
+
+        <div id="byakko" class="tabPanel" style="display: none">
+          <div class="panel wb-panel">
+
+            <div class="wb-boss-header">
+              <img src="sprites/world_bosses/byakko/byakko_icon.png" class="wb-boss-icon" alt="Byakko" />
+              <div>
+                <h3 class="wb-boss-title" data-lang="wbBossTitleByakko">Byakko</h3>
+                <p class="wb-boss-subtitle" data-lang="wbBossSubtitle">World Boss</p>
+              </div>
+            </div>
+
+            <section class="wb-section">
+              <div class="wb-section-head">
+                <h4 data-lang="wbPhasesSkills">Fases &amp; Habilidades</h4>
+                <button id="bk-table-toggle" class="wb-toggle-btn" type="button" data-lang="wbModeSkills">Modo Habilidades</button>
+              </div>
+              <div class="wb-table-and-preview">
+                <div class="wb-table-outer">
+                  <div id="bk-table-wrap"></div>
+                </div>
+                <div class="wb-skill-preview">
+                  <img id="bk-skill-gif" class="wb-skill-gif" src="sprites/world_bosses/byakko/top_1_icon.gif" alt="Habilidade" />
+                  <span id="bk-skill-label" class="wb-skill-label">Garra Básica</span>
+                  <p id="bk-skill-description" class="wb-skill-description"></p>
+                </div>
+              </div>
+            </section>
+
+            <div class="wb-bottom-section">
+              <section class="wb-section">
+                <div class="wb-section-head">
+                  <h4 data-lang="wbRecommendedCharacters">Personagens Recomendados</h4>
+                </div>
+                <div id="bk-characters"></div>
+              </section>
+              <section class="wb-section">
+                <div class="wb-section-head">
+                  <h4 data-lang="wbRewardsByDamage">Recompensas por Dano</h4>
+                </div>
+                <div id="bk-rewards"></div>
+              </section>
+            </div>
+
+          </div>
+        </div>
+
+        <div id="bananawani" class="tabPanel" style="display: none">
+          <div class="panel wb-panel">
+
+            <div class="wb-boss-header">
+              <img src="sprites/world_bosses/bananawani/banana_icon.png" class="wb-boss-icon" alt="Bananawani" />
+              <div>
+                <h3 class="wb-boss-title" data-lang="wbBossTitleBananawani">Bananawani</h3>
+                <p class="wb-boss-subtitle" data-lang="wbBossSubtitle">World Boss</p>
+              </div>
+            </div>
+
+            <section class="wb-section">
+              <div class="wb-section-head">
+                <h4 data-lang="wbPhasesSkills">Fases &amp; Habilidades</h4>
+                <button id="bw-table-toggle" class="wb-toggle-btn" type="button" data-lang="wbModeSkills">Modo Habilidades</button>
+              </div>
+              <div class="wb-table-and-preview">
+                <div class="wb-table-outer">
+                  <div id="bw-table-wrap"></div>
+                </div>
+                <div class="wb-skill-preview">
+                  <img id="bw-skill-gif" class="wb-skill-gif" src="sprites/world_bosses/bananawani/top_1_icon.gif" alt="Habilidade" />
+                  <span id="bw-skill-label" class="wb-skill-label">Mordida</span>
+                  <p id="bw-skill-description" class="wb-skill-description"></p>
+                </div>
+              </div>
+            </section>
+
+            <div class="wb-bottom-section">
+              <section class="wb-section">
+                <div class="wb-section-head">
+                  <h4 data-lang="wbRecommendedCharacters">Personagens Recomendados</h4>
+                </div>
+                <div id="bw-characters"></div>
+              </section>
+              <section class="wb-section">
+                <div class="wb-section-head">
+                  <h4 data-lang="wbRewardsByDamage">Recompensas por Dano</h4>
+                </div>
+                <div id="bw-rewards"></div>
+              </section>
+            </div>
+
+          </div>
+        </div>
+
+        <div id="plesiosaur" class="tabPanel" style="display: none">
+          <div class="panel wb-panel">
+
+            <div class="wb-boss-header">
+              <img src="sprites/world_bosses/plesiosaur/plesio_icon.png" class="wb-boss-icon" alt="Plesiosaur" />
+              <div>
+                <h3 class="wb-boss-title" data-lang="wbBossTitlePlesiosaur">Plesiosaur</h3>
+                <p class="wb-boss-subtitle" data-lang="wbBossSubtitle">World Boss</p>
+              </div>
+            </div>
+
+            <section class="wb-section">
+              <div class="wb-section-head">
+                <h4 data-lang="wbPhasesSkills">Fases &amp; Habilidades</h4>
+                <button id="pl-table-toggle" class="wb-toggle-btn" type="button" data-lang="wbModeSkills">Modo Habilidades</button>
+              </div>
+              <div class="wb-table-and-preview">
+                <div class="wb-table-outer">
+                  <div id="pl-table-wrap"></div>
+                </div>
+                <div class="wb-skill-preview">
+                  <img id="pl-skill-gif" class="wb-skill-gif" src="sprites/world_bosses/plesiosaur/top_1_icon.gif" alt="Habilidade" />
+                  <span id="pl-skill-label" class="wb-skill-label">Ataque Básico</span>
+                  <p id="pl-skill-description" class="wb-skill-description"></p>
+                </div>
+              </div>
+            </section>
+
+            <div class="wb-bottom-section">
+              <section class="wb-section">
+                <div class="wb-section-head">
+                  <h4 data-lang="wbRecommendedCharacters">Personagens Recomendados</h4>
+                </div>
+                <div id="pl-characters"></div>
+              </section>
+              <section class="wb-section">
+                <div class="wb-section-head">
+                  <h4 data-lang="wbRewardsByDamage">Recompensas por Dano</h4>
+                </div>
+                <div id="pl-rewards"></div>
+              </section>
+            </div>
+
+          </div>
+        </div>
+
+        <div id="aokiji" class="tabPanel" style="display: none">
+          <div class="panel wb-panel">
+
+            <div class="wb-boss-header">
+              <img src="sprites/world_bosses/aokiji/aokiji_icon.png" class="wb-boss-icon" alt="Aokiji" />
+              <div>
+                <h3 class="wb-boss-title" data-lang="wbBossTitleAokiji">Aokiji</h3>
+                <p class="wb-boss-subtitle" data-lang="wbBossSubtitle">World Boss</p>
+              </div>
+            </div>
+
+            <section class="wb-section">
+              <div class="wb-section-head">
+                <h4 data-lang="wbPhasesSkills">Fases &amp; Habilidades</h4>
+                <button id="ao-table-toggle" class="wb-toggle-btn" type="button" data-lang="wbModeSkills">Modo Habilidades</button>
+              </div>
+              <div class="wb-table-and-preview">
+                <div class="wb-table-outer">
+                  <div id="ao-table-wrap"></div>
+                </div>
+                <div class="wb-skill-preview">
+                  <img id="ao-skill-gif" class="wb-skill-gif" src="sprites/world_bosses/aokiji/ice_saber.gif" alt="Habilidade" />
+                  <span id="ao-skill-label" class="wb-skill-label">Ice Saber</span>
+                  <p id="ao-skill-description" class="wb-skill-description"></p>
+                </div>
+              </div>
+            </section>
+
+            <div class="wb-bottom-section">
+              <section class="wb-section">
+                <div class="wb-section-head">
+                  <h4 data-lang="wbRecommendedCharacters">Personagens Recomendados</h4>
+                </div>
+                <div id="ao-characters"></div>
+              </section>
+              <section class="wb-section">
+                <div class="wb-section-head">
+                  <h4 data-lang="wbRewardsByDamage">Recompensas por Dano</h4>
+                </div>
+                <div id="ao-rewards"></div>
+              </section>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Weekly Bosses panels -->
+
+        <div id="wkb_general" class="tabPanel" style="display: none">
+          <div class="panel wkb-panel">
+            <div class="wkb-boss-header">
+              <div>
+                <h3 class="wkb-boss-title" data-lang="wkbGeneralConcepts">Conceitos Gerais</h3>
+                <p class="wkb-boss-subtitle" data-lang="weeklyBossesFolder">Weekly Bosses</p>
+              </div>
+            </div>
+            <div id="wkb-general-content"></div>
+          </div>
+        </div>
+
+        <!-- Marineford panels -->
+
+        <div id="mf_general" class="tabPanel" style="display: none">
+          <div class="panel mf-panel">
+            <div class="mf-boss-header">
+              <div>
+                <h3 class="mf-boss-title" data-lang="mfGeneralConcepts">Conceitos Gerais</h3>
+                <p class="mf-boss-subtitle" data-lang="mfBossSubtitle">Marineford</p>
+              </div>
+            </div>
+            <div id="mf-general-content" class="mf-general-sections"></div>
+          </div>
+        </div>
+
+        <div id="mf_bastille" class="tabPanel" style="display: none">
+          <div class="panel mf-panel">
+            <div class="mf-boss-header">
+              <div>
+                <h3 class="mf-boss-title">Bastille</h3>
+                <p class="mf-boss-subtitle" data-lang="mfBossSubtitle">Marineford</p>
+              </div>
+            </div>
+            <div id="mf-skills-bastille" class="mf-skills-list"></div>
+          </div>
+        </div>
+
+        <div id="mf_brannew" class="tabPanel" style="display: none">
+          <div class="panel mf-panel">
+            <div class="mf-boss-header">
+              <div>
+                <h3 class="mf-boss-title">Brannew</h3>
+                <p class="mf-boss-subtitle" data-lang="mfBossSubtitle">Marineford</p>
+              </div>
+            </div>
+            <div id="mf-skills-brannew" class="mf-skills-list"></div>
+          </div>
+        </div>
+
+        <div id="mf_dalmatian" class="tabPanel" style="display: none">
+          <div class="panel mf-panel">
+            <div class="mf-boss-header">
+              <div>
+                <h3 class="mf-boss-title">Dalmatian</h3>
+                <p class="mf-boss-subtitle" data-lang="mfBossSubtitle">Marineford</p>
+              </div>
+            </div>
+            <div id="mf-skills-dalmatian" class="mf-skills-list"></div>
+          </div>
+        </div>
+
+        <div id="mf_hina" class="tabPanel" style="display: none">
+          <div class="panel mf-panel">
+            <div class="mf-boss-header">
+              <div>
+                <h3 class="mf-boss-title">Hina</h3>
+                <p class="mf-boss-subtitle" data-lang="mfBossSubtitle">Marineford</p>
+              </div>
+            </div>
+            <div id="mf-skills-hina" class="mf-skills-list"></div>
+          </div>
+        </div>
+
+        <div id="mf_jango" class="tabPanel" style="display: none">
+          <div class="panel mf-panel">
+            <div class="mf-boss-header">
+              <div>
+                <h3 class="mf-boss-title">Jango</h3>
+                <p class="mf-boss-subtitle" data-lang="mfBossSubtitle">Marineford</p>
+              </div>
+            </div>
+            <div id="mf-skills-jango" class="mf-skills-list"></div>
+          </div>
+        </div>
+
+        <div id="mf_moria" class="tabPanel" style="display: none">
+          <div class="panel mf-panel">
+            <div class="mf-boss-header">
+              <div>
+                <h3 class="mf-boss-title">Moria</h3>
+                <p class="mf-boss-subtitle" data-lang="mfBossSubtitle">Marineford</p>
+              </div>
+            </div>
+            <div id="mf-skills-moria" class="mf-skills-list"></div>
+          </div>
+        </div>
+
+        <div id="mf_smoker" class="tabPanel" style="display: none">
+          <div class="panel mf-panel">
+            <div class="mf-boss-header">
+              <div>
+                <h3 class="mf-boss-title">Smoker</h3>
+                <p class="mf-boss-subtitle" data-lang="mfBossSubtitle">Marineford</p>
+              </div>
+            </div>
+            <div id="mf-skills-smoker" class="mf-skills-list"></div>
+          </div>
+        </div>
+
+        <div id="mf_tashigi" class="tabPanel" style="display: none">
+          <div class="panel mf-panel">
+            <div class="mf-boss-header">
+              <div>
+                <h3 class="mf-boss-title">Tashigi</h3>
+                <p class="mf-boss-subtitle" data-lang="mfBossSubtitle">Marineford</p>
+              </div>
+            </div>
+            <div id="mf-skills-tashigi" class="mf-skills-list"></div>
+          </div>
+        </div>
+
+        <div id="mf_aokiji" class="tabPanel" style="display: none">
+          <div class="panel mf-panel">
+            <div class="mf-boss-header">
+              <div>
+                <h3 class="mf-boss-title">Aokiji</h3>
+                <p class="mf-boss-subtitle" data-lang="mfBossSubtitle">Marineford</p>
+              </div>
+            </div>
+            <div id="mf-skills-aokiji" class="mf-skills-list"></div>
+          </div>
+        </div>
+
+        <div id="mf_doflamingo" class="tabPanel" style="display: none">
+          <div class="panel mf-panel">
+            <div class="mf-boss-header">
+              <div>
+                <h3 class="mf-boss-title">Doflamingo</h3>
+                <p class="mf-boss-subtitle" data-lang="mfBossSubtitle">Marineford</p>
+              </div>
+            </div>
+            <div id="mf-skills-doflamingo" class="mf-skills-list"></div>
+          </div>
+        </div>
+
+        <div id="mf_kizaru" class="tabPanel" style="display: none">
+          <div class="panel mf-panel">
+            <div class="mf-boss-header">
+              <div>
+                <h3 class="mf-boss-title">Kizaru</h3>
+                <p class="mf-boss-subtitle" data-lang="mfBossSubtitle">Marineford</p>
+              </div>
+            </div>
+            <div id="mf-skills-kizaru" class="mf-skills-list"></div>
+          </div>
+        </div>
+
+        <div id="mf_mihawk" class="tabPanel" style="display: none">
+          <div class="panel mf-panel">
+            <div class="mf-boss-header">
+              <div>
+                <h3 class="mf-boss-title">Mihawk</h3>
+                <p class="mf-boss-subtitle" data-lang="mfBossSubtitle">Marineford</p>
+              </div>
+            </div>
+            <div id="mf-skills-mihawk" class="mf-skills-list"></div>
+          </div>
+        </div>
+
+        <div id="mf_akainu" class="tabPanel" style="display: none">
+          <div class="panel mf-panel">
+            <div class="mf-boss-header">
+              <div>
+                <h3 class="mf-boss-title">Akainu</h3>
+                <p class="mf-boss-subtitle" data-lang="mfBossSubtitle">Marineford</p>
+              </div>
+            </div>
+            <div id="mf-skills-akainu" class="mf-skills-list"></div>
+          </div>
+        </div>
+
+        <div id="links" class="tabPanel" style="display: none">
+          <div class="panel links-panel">
+            <h3 data-lang="usefulLinksTitle">Links Úteis</h3>
+
+            <section class="links-section">
+              <h4 data-lang="usefulLinksOfficial">Links Oficiais do GLA</h4>
+              <div class="links-list">
+                <a href="https://discord.gg/grandlineadventures" target="_blank" rel="noopener noreferrer" class="links-item">
+                  <span class="links-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.012.044.027.06a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg></span>
+                  <span class="links-item-content"><strong>Discord</strong><small>Discord do Grandline Adventures</small></span>
+                </a>
+                <a href="https://grandlineadventures.com/" target="_blank" rel="noopener noreferrer" class="links-item">
+                  <span class="links-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm6.93 9h-3.08a15.72 15.72 0 0 0-1.15-4.32A8.03 8.03 0 0 1 18.93 11zM12 4.06A13.73 13.73 0 0 1 13.8 11h-3.6A13.73 13.73 0 0 1 12 4.06zM9.3 6.68A15.72 15.72 0 0 0 8.15 11H5.07A8.03 8.03 0 0 1 9.3 6.68zM5.07 13h3.08a15.72 15.72 0 0 0 1.15 4.32A8.03 8.03 0 0 1 5.07 13zM12 19.94A13.73 13.73 0 0 1 10.2 13h3.6A13.73 13.73 0 0 1 12 19.94zm2.7-2.62A15.72 15.72 0 0 0 15.85 13h3.08a8.03 8.03 0 0 1-4.23 4.32z"/></svg></span>
+                  <span class="links-item-content"><strong>Site Oficial</strong><small>Portal principal do Grandline Adventures</small></span>
+                </a>
+                <a href="https://support.gla.com.br/" target="_blank" rel="noopener noreferrer" class="links-item">
+                  <span class="links-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm5.93 9h-2.02a4.97 4.97 0 0 0-2.89-2.89V6.07A6.99 6.99 0 0 1 17.93 11zM11 6.07v2.04A4.97 4.97 0 0 0 8.11 11H6.07A6.99 6.99 0 0 1 11 6.07zM6.07 13h2.04A4.97 4.97 0 0 0 11 15.89v2.04A6.99 6.99 0 0 1 6.07 13zM13 17.93v-2.04A4.97 4.97 0 0 0 15.89 13h2.04A6.99 6.99 0 0 1 13 17.93zM12 14a2 2 0 1 1 2-2 2 2 0 0 1-2 2z"/></svg></span>
+                  <span class="links-item-content"><strong>Suporte</strong><small>Central de suporte oficial</small></span>
+                </a>
+                <a href="https://wiki.gla.com.br/" target="_blank" rel="noopener noreferrer" class="links-item">
+                  <span class="links-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 2H8a4 4 0 0 0-4 4v13a1 1 0 0 0 1.45.89A3.94 3.94 0 0 1 7 19.5h11a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm0 15.5H7a5.9 5.9 0 0 0-1 .09V6a2 2 0 0 1 2-2h10z"/></svg></span>
+                  <span class="links-item-content"><strong>Wiki</strong><small>Base de conhecimento oficial do GLA</small></span>
+                </a>
+                <a href="https://trello.com/b/HrEwfx1I/gla-balanceamento" target="_blank" rel="noopener noreferrer" class="links-item">
+                  <span class="links-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 3H3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM10 17a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1zm10-6a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1z"/></svg></span>
+                  <span class="links-item-content"><strong>Trello</strong><small>Quadro de balanceamento do GLA</small></span>
+                </a>
+                <a href="https://www.facebook.com/grandlineadventures" target="_blank" rel="noopener noreferrer" class="links-item">
+                  <span class="links-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 22v-8h3l1-4h-4V8c0-1.03 0-2 2-2h2V2h-3c-3.27 0-5 1.34-5 5v3H6v4h3v8z"/></svg></span>
+                  <span class="links-item-content"><strong>Facebook</strong><small>Página oficial do Grandline Adventures</small></span>
+                </a>
+                <a href="https://www.instagram.com/grandlineadventures" target="_blank" rel="noopener noreferrer" class="links-item">
+                  <span class="links-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm11.5 1a1.5 1.5 0 1 1-1.5 1.5A1.5 1.5 0 0 1 18.5 5zM12 7a5 5 0 1 1-5 5 5 5 0 0 1 5-5zm0 2a3 3 0 1 0 3 3 3 3 0 0 0-3-3z"/></svg></span>
+                  <span class="links-item-content"><strong>Instagram</strong><small>Perfil oficial do Grandline Adventures</small></span>
+                </a>
+                <a href="https://www.youtube.com/@GrandLineAdventures" target="_blank" rel="noopener noreferrer" class="links-item">
+                  <span class="links-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M23.5 6.2a3.1 3.1 0 0 0-2.2-2.2C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.3.5A3.1 3.1 0 0 0 .5 6.2 32.6 32.6 0 0 0 0 12a32.6 32.6 0 0 0 .5 5.8 3.1 3.1 0 0 0 2.2 2.2c2 .5 9.3.5 9.3.5s7.3 0 9.3-.5a3.1 3.1 0 0 0 2.2-2.2A32.6 32.6 0 0 0 24 12a32.6 32.6 0 0 0-.5-5.8zM9.6 15.5V8.5l6.2 3.5-6.2 3.5z"/></svg></span>
+                  <span class="links-item-content"><strong>YouTube</strong><small>Canal oficial do Grandline Adventures</small></span>
+                </a>
+              </div>
+            </section>
+
+            <section class="links-section">
+              <h4 data-lang="usefulLinksCommunity">Links da Comunidade</h4>
+              <div class="links-list">
+                <a href="https://discord.gg/YSEGjUQr6b" target="_blank" rel="noopener noreferrer" class="links-item">
+                  <span class="links-item-icon links-item-icon-atios" aria-hidden="true"><img src="sprites/icons/links/atios.webp" alt=""></span>
+                  <span class="links-item-content"><strong>Gaveta do Atios</strong><small>Servidor da comunidade no Discord</small></span>
+                </a>
+                <a href="https://discord.gg/mDqnvVMTRK" target="_blank" rel="noopener noreferrer" class="links-item">
+                  <span class="links-item-icon" aria-hidden="true"><img src="sprites/icons/links/gla_profile_icons_disc.webp" alt=""></span>
+                  <span class="links-item-content"><strong>GLA - Profile Icons</strong><small>Discord para ícones de perfil</small></span>
+                </a>
+                <a href="https://lionheartgla.github.io/Gla-Database/index.html" target="_blank" rel="noopener noreferrer" class="links-item">
+                  <span class="links-item-icon" aria-hidden="true">🧰</span>
+                  <span class="links-item-content"><strong>Lionheart Tools</strong><small>Ferramentas da comunidade para GLA</small></span>
+                </a>
+                  <a href="https://quiz.gour.cc/br/" target="_blank" rel="noopener noreferrer" class="links-item">
+                  <span class="links-item-icon" aria-hidden="true">💬</span>
+                  <span class="links-item-content"><strong>Respostas do Foxy Quiz</strong><small>Site com uma barra de pesquisa para respostas do Foxy Quiz</small></span>
+                </a>
+              </div>
+            </section>
+          </div>
+        </div>
+        <div id="weekly_chest" class="tabPanel" style="display: none">
+          <div class="panel wc-panel">
+            <div class="wc-header-row">
+              <h3 data-lang="wcTitle">Baú Semanal</h3>
+              <span class="wc-credits" data-lang="wcCredits">Créditos a Atiosz pela ideia</span>
+            </div>
+            <div class="wc-legend">
+              <span class="wc-legend-item">
+                <span class="wc-legend-dot wc-legend-dot-current"></span>
+                <span data-lang="wcLegendCurrent">Semana atual</span>
+              </span>
+              <span class="wc-legend-item">
+                <span class="wc-legend-dot wc-legend-dot-yellow"></span>
+                <span data-lang="wcLegendYellow">Até 1 mês</span>
+              </span>
+              <span class="wc-legend-item">
+                <span class="wc-legend-dot wc-legend-dot-orange"></span>
+                <span data-lang="wcLegendOrange">1 a 2 meses</span>
+              </span>
+              <span class="wc-legend-item">
+                <span class="wc-legend-dot wc-legend-dot-red"></span>
+                <span data-lang="wcLegendRed">Mais de 2 meses</span>
+              </span>
+              <span class="wc-legend-item">
+                <span class="wc-legend-dot wc-legend-dot-blue"></span>
+                <span data-lang="wcLegendBlue">Sem rotação</span>
+              </span>
+              <span class="wc-legend-item">
+                <span class="wc-legend-dot wc-legend-dot-purple"></span>
+                <span data-lang="wcLegendPurple">Ainda não rotacionou</span>
+              </span>
+            </div>
+            <div class="wc-chests-section">
+              <div class="wc-chest-panel wc-chest-panel-current">
+                <h4 class="wc-chest-panel-title" data-lang="wcCurrentChest">Semana Atual</h4>
+                <div id="wc-current-chests" class="wc-chest-rows"></div>
+              </div>
+              <div class="wc-chest-panel wc-chest-panel-next">
+                <h4 class="wc-chest-panel-title" data-lang="wcNextChest">Próxima Semana</h4>
+                <div id="wc-next-chests" class="wc-chest-rows"></div>
+              </div>
+            </div>
+            <div class="wc-controls-row">
+              <div class="wc-search-wrap">
+                <label for="wc-search-input" data-lang="wcSearchLabel">Pesquisar</label>
+                <input id="wc-search-input" type="text" autocomplete="off" spellcheck="false" />
+              </div>
+              <div class="wc-sort-wrap">
+                <label for="wc-sort-select" data-lang="wcSortLabel">Ordenar</label>
+                <select id="wc-sort-select">
+                  <option value="name_az" data-lang="wcSortNameAZ">Nome (A-Z)</option>
+                  <option value="name_za" data-lang="wcSortNameZA">Nome (Z-A)</option>
+                  <option value="date_newest" data-lang="wcSortDateNewest">Data (mais recente)</option>
+                  <option value="date_oldest" data-lang="wcSortDateOldest">Data (mais antiga)</option>
+                </select>
+              </div>
+              <label class="wc-checkbox-wrap">
+                <input type="checkbox" id="wc-hide-no-rotation" checked />
+                <span data-lang="wcHideNoRotation">Ocultar sem rotação</span>
+              </label>
+            </div>
+            <div id="wc-filter-row" class="wc-filter-row"></div>
+            <div id="wc-grid" class="wc-grid"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="profile-modal-overlay" class="profile-modal-overlay" aria-hidden="true">
+        <div class="profile-modal" role="dialog" aria-modal="true" aria-label="Profiles">
+          <div class="profile-modal-header">
+            <h4 class="profile-modal-title" data-lang="profileModalTitle">Perfis</h4>
+            <button type="button" class="profile-modal-close" data-profile-close aria-label="Close">✕</button>
+          </div>
+
+          <div class="profile-modal-actions">
+            <button type="button" class="profile-action-btn" data-profile-action="create"><span class="btn-icon">➕</span> <span class="btn-label" data-lang="profileCreate">Criar</span></button>
+            <button type="button" class="profile-action-btn is-danger" data-profile-action="delete"><span class="btn-icon">❌</span> <span class="btn-label" data-lang="deleteProfile">Deletar</span></button>
+            <button type="button" class="profile-action-btn" data-profile-action="edit"><span class="btn-icon">✏️</span> <span class="btn-label" data-lang="profileEdit">Editar Perfil</span></button>
+            <button type="button" class="profile-action-btn" data-profile-action="export"><span class="btn-icon">📤</span> <span class="btn-label" data-lang="exportBuild">Exportar</span></button>
+            <button type="button" class="profile-action-btn" data-profile-action="import"><span class="btn-icon">📥</span> <span class="btn-label" data-lang="importBuild">Importar</span></button>
+            <button type="button" class="profile-action-btn" data-profile-action="share"><span class="btn-icon">🔗</span> <span class="btn-label" data-lang="profileShareLink">Compartilhar link</span></button>
+            <button type="button" class="profile-action-btn" data-profile-action="paste"><span class="btn-icon">🔗</span> <span class="btn-label" data-lang="profilePasteLink">Colar link</span></button>
+          </div>
+
+          <div class="profile-list-wrap">
+            <div id="profile-empty-msg" class="profile-empty-msg" data-lang="profileNoProfiles">Nenhum perfil. Clique em ➕ para criar.</div>
+            <div id="profile-card-list" class="profile-list"></div>
+          </div>
+
+          <div id="profile-subform" class="profile-subform" style="display:none;">
+            <h5 class="profile-subform-title" data-lang="profileCreateTitle">Criar Perfil</h5>
+            <div class="profile-subform-fields">
+              <div class="profile-subform-field profile-form-row-name">
+                <label data-profile-label="name" data-lang="profileNameLabel">Nome</label>
+                <input id="profile-form-name" type="text" data-lang-title="profileNamePlaceholder" />
+              </div>
+              <div class="profile-subform-field profile-form-row-emoji">
+                <label data-profile-label="emoji" data-lang="profileEmojiLabel">Emoji</label>
+                <div class="profile-emoji-selector">
+                  <button id="profile-emoji-trigger" class="profile-emoji-trigger" type="button" aria-haspopup="dialog" aria-expanded="false">👤</button>
+                  <div id="profile-emoji-popover" class="profile-emoji-popover" style="display:none;">
+                    <emoji-picker id="profile-emoji-picker" class="profile-emoji-picker" locale="en"></emoji-picker>
+                  </div>
+                  <input id="profile-form-emoji" class="profile-emoji-hidden-input" type="text" maxlength="10" value="👤" />
+                </div>
+              </div>
+              <div class="profile-subform-field profile-form-row-color">
+                <label data-profile-label="color" data-lang="profileColorLabel">Cor</label>
+                <div class="profile-color-modern">
+                  <div id="profile-color-pickr" class="profile-color-pickr"></div>
+                  <input id="profile-form-color" class="profile-color-hidden-input" type="text" value="#8b6a30" />
+                  <div class="profile-color-inputs">
+                    <input id="profile-color-hex" class="profile-color-input" type="text" value="#8b6a30" maxlength="9" aria-label="HEX" />
+                    <div class="profile-color-rgb-wrap">
+                      <input id="profile-color-r" class="profile-color-input rgb" type="number" min="0" max="255" value="139" aria-label="Red" />
+                      <input id="profile-color-g" class="profile-color-input rgb" type="number" min="0" max="255" value="106" aria-label="Green" />
+                      <input id="profile-color-b" class="profile-color-input rgb" type="number" min="0" max="255" value="48" aria-label="Blue" />
+                    </div>
+                  </div>
+                  <div id="profile-color-preview" class="profile-color-preview" style="background:#8b6a30;"></div>
+                </div>
+              </div>
+              <div id="profile-live-preview" class="profile-live-preview">
+                <div id="profile-live-preview-emoji" class="profile-live-preview-emoji">👤</div>
+                <div class="profile-live-preview-info">
+                  <div id="profile-live-preview-name" class="profile-live-preview-name">Perfil</div>
+                  <div class="profile-live-preview-sub">preview</div>
+                </div>
+                <div id="profile-live-preview-color" class="profile-live-preview-color" style="background:#8b6a30;"></div>
+              </div>
+            </div>
+            <div class="profile-subform-actions">
+              <button id="profile-form-cancel" type="button" class="profile-action-btn" data-lang="profileCancel">Cancelar</button>
+              <button id="profile-form-confirm" type="button" class="profile-action-btn" data-lang="profileConfirm">Confirmar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
+
+      <div id="update-warning-overlay" class="update-warning-overlay" role="dialog" aria-modal="true" aria-labelledby="update-warning-title" hidden>
+        <div class="update-warning-shell">
+          <img class="update-warning-brand" src="sprites/branding/pop_up.png" alt="" aria-hidden="true" />
+          <div class="update-warning-modal" id="update-warning-modal">
+            <h3 id="update-warning-title">⚠️ Important notice</h3>
+            <div class="update-warning-text" id="update-warning-text">
+              <pre id="update-warning-body" class="update-warning-body"></pre>
+            </div>
+            <label class="update-warning-dont-show">
+              <input type="checkbox" id="update-warning-dont-show-cb">
+              <span id="update-warning-dont-show-label">Don't show again</span>
+            </label>
+            <p class="update-warning-hint" id="update-warning-hint">Click outside the text to close.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- All app scripts deferred — downloaded in parallel during HTML parse,
+         executed in source order after DOMContentLoaded -->
+    <script defer src="js/debounce.js"></script>
+    <script defer src="js/lazy_images.js"></script>
+    <script defer src="js/data.js"></script>
+    <script defer src="js/items.js"></script>
+    <script defer src="js/lang.js"></script>
+    <script defer src="js/update_warning_content.js"></script>
+    <script defer src="js/update_warning.js"></script>
+    <script defer src="js/rarity.js"></script>
+    <script defer src="js/combos.js"></script>
+    <script defer src="js/dnd.js"></script>
+    <script defer src="js/touch_dnd.js"></script>
+    <script defer src="js/cards.js"></script>
+    <script defer src="js/color_picker_factory.js"></script>
+    <script defer src="js/groups.js"></script>
+    <script defer src="js/profiles.js"></script>
+    <script defer src="js/ui.js"></script>
+    <script defer src="js/tables.js"></script>
+    <script defer src="js/recipes-data.js"></script>
+    <script defer src="js/recipes.js"></script>
+    <script defer src="js/chest.js"></script>
+    <script defer src="js/boost.js"></script>
+    <script defer src="js/xp.js"></script>
+    <script defer src="js/characters-data.js"></script>
+    <script defer src="js/characters.js"></script>
+    <script defer src="js/foxy_quiz.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script defer src="js/tracker.js"></script>
+    <script defer src="js/boats-data.js"></script>
+    <script defer src="js/boats.js"></script>
+    <script defer src="js/wanted-data.js"></script>
+    <script defer src="js/wanted.js"></script>
+    <script defer src="js/tierlist.js"></script>
+    <script defer src="js/world_bosses.js"></script>
+    <script defer src="js/marineford.js"></script>
+    <script defer src="js/weekly_bosses.js"></script>
+    <script defer src="js/island_chests.js"></script>
+    <script defer src="js/weekly_chest.js"></script>
+    <script defer src="js/theme.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+    <script defer src="js/main.js"></script>
+  </body>
+</html>
