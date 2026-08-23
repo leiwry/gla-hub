@@ -1,0 +1,12 @@
+.claude
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Backups
+*.backup.*
+*.bak
+*.old
