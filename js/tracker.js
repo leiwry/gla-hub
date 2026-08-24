@@ -1034,9 +1034,9 @@ function trackerEnsureFoxyAccountsStyle() {
   style.textContent = `
     .tracker-foxy-table-wrap { overflow-x: auto; width: 100%; }
     .tracker-foxy-table { border-collapse: collapse; width: 100%; min-width: 420px; }
-    .tracker-foxy-table th, .tracker-foxy-table td { border: 1px solid var(--input-focus, #555); padding: 6px 8px; text-align: center; }
+    .tracker-foxy-table th, .tracker-foxy-table td { border: 1px solid var(--input-focus, #555); padding: 10px 14px; text-align: center; }
     .tracker-foxy-account-head, .tracker-foxy-account-name-cell { text-align: left; min-width: 130px; }
-    .tracker-foxy-th-icon { width: 28px; height: 28px; object-fit: contain; }
+    .tracker-foxy-th-icon { width: 36px; height: 36px; object-fit: contain; }
     .tracker-foxy-account-name-cell { display: flex; align-items: center; gap: 6px; border-top: none; border-bottom: none; }
     .tracker-foxy-account-name-input {
       flex: 1; min-width: 0; background: transparent; border: 1px solid var(--input-focus, #555);
@@ -1049,9 +1049,10 @@ function trackerEnsureFoxyAccountsStyle() {
     .tracker-foxy-account-remove:hover { color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17); }
     .tracker-foxy-cell.is-checked { background: color-mix(in srgb, var(--text-tab-active, #1fb84f) 25%, transparent); }
     .tracker-foxy-cell-label { display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .tracker-foxy-cell-label input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; }
     .tracker-foxy-add-account-btn {
-      margin-top: 8px; background: transparent; border: 1px solid var(--input-focus, #555); border-radius: 4px;
-      color: var(--text-main, inherit); cursor: pointer; padding: 5px 12px; font: inherit;
+      margin-top: 6px; background: transparent; border: 1px solid var(--input-focus, #555); border-radius: 4px;
+      color: var(--text-main, inherit); cursor: pointer; padding: 3px 9px; font-size: 0.82em; line-height: 1.3;
     }
     .tracker-foxy-add-account-btn:hover { color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17); }
   `;
@@ -1063,6 +1064,18 @@ function trackerRenderFoxyEvents() {
   if (!container) return;
 
   trackerEnsureFoxyAccountsStyle();
+
+  // Preserve focus/cursor if the user is mid-typing in an account name field
+  // when this gets re-rendered (e.g. triggered by another Tracker action).
+  const activeEl = document.activeElement;
+  let refocus = null;
+  if (activeEl && container.contains(activeEl) && activeEl.matches("[data-tracker-foxy-account-name]")) {
+    refocus = {
+      accountId: activeEl.getAttribute("data-tracker-foxy-account-name"),
+      selectionStart: activeEl.selectionStart,
+      selectionEnd: activeEl.selectionEnd
+    };
+  }
 
   const accounts = trackerState.foxy.accounts || [];
 
@@ -1118,6 +1131,14 @@ function trackerRenderFoxyEvents() {
     <button type="button" id="tracker-foxy-add-account" class="tracker-foxy-add-account-btn">+ ${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountAdd", "Adicionar conta"))}</button>
   `;
 
+  if (refocus) {
+    const newInput = container.querySelector(`[data-tracker-foxy-account-name="${refocus.accountId}"]`);
+    if (newInput) {
+      newInput.focus();
+      try { newInput.setSelectionRange(refocus.selectionStart, refocus.selectionEnd); } catch (e) { /* ignore */ }
+    }
+  }
+
   container.querySelectorAll("[data-tracker-foxy-event]").forEach((checkbox) => {
     checkbox.addEventListener("change", () => {
       const accountId = checkbox.getAttribute("data-tracker-foxy-account");
@@ -1129,7 +1150,7 @@ function trackerRenderFoxyEvents() {
         return;
       }
 
-      const account = accounts.find((a) => a.id === accountId);
+      const account = (trackerState.foxy.accounts || []).find((a) => a.id === accountId);
       if (!account || !Object.prototype.hasOwnProperty.call(account.events, eventId)) return;
       account.events[eventId] = !!checkbox.checked;
       trackerRenderFoxyEvents();
@@ -1140,7 +1161,7 @@ function trackerRenderFoxyEvents() {
   container.querySelectorAll("[data-tracker-foxy-account-name]").forEach((input) => {
     input.addEventListener("input", () => {
       const accountId = input.getAttribute("data-tracker-foxy-account-name");
-      const account = accounts.find((a) => a.id === accountId);
+      const account = (trackerState.foxy.accounts || []).find((a) => a.id === accountId);
       if (!account) return;
       account.name = input.value;
       if (typeof autoSaveBuild === "function") autoSaveBuild();
@@ -1150,7 +1171,7 @@ function trackerRenderFoxyEvents() {
   container.querySelectorAll("[data-tracker-foxy-account-remove]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const accountId = btn.getAttribute("data-tracker-foxy-account-remove");
-      trackerState.foxy.accounts = accounts.filter((a) => a.id !== accountId);
+      trackerState.foxy.accounts = (trackerState.foxy.accounts || []).filter((a) => a.id !== accountId);
       if (!trackerState.foxy.accounts.length) {
         trackerState.foxy.accounts.push(trackerCreateDefaultFoxyAccount(""));
       }
