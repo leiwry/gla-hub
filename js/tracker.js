@@ -1032,26 +1032,23 @@ function trackerEnsureFoxyAccountsStyle() {
   const style = document.createElement("style");
   style.id = "tracker-foxy-accounts-style";
   style.textContent = `
-    .tracker-foxy-table-wrap { overflow-x: auto; width: 100%; }
-    .tracker-foxy-table { border-collapse: collapse; width: 100%; min-width: 480px; }
-    .tracker-foxy-table th, .tracker-foxy-table td { border: 1px solid var(--input-focus, #555); padding: 14px 18px; text-align: center; }
-    .tracker-foxy-account-head, .tracker-foxy-account-name-cell { text-align: left; min-width: 130px; }
-    .tracker-foxy-th-icon { width: 56px; height: 56px; object-fit: contain; }
-    .tracker-foxy-account-name-cell { display: flex; align-items: center; gap: 6px; border-top: none; border-bottom: none; }
+    .tracker-foxy-account-block { margin-bottom: 18px; }
+    .tracker-foxy-account-block + .tracker-foxy-account-block {
+      padding-top: 14px; border-top: 1px solid var(--input-focus, #555);
+    }
+    .tracker-foxy-account-header { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
     .tracker-foxy-account-name-input {
-      flex: 1; min-width: 0; background: transparent; border: 1px solid var(--input-focus, #555);
-      border-radius: 4px; padding: 4px 6px; color: var(--text-main, inherit); font: inherit;
+      flex: 0 1 220px; min-width: 0; background: transparent; border: 1px solid var(--input-focus, #555);
+      border-radius: 4px; padding: 4px 8px; color: var(--text-main, inherit); font: inherit;
     }
     .tracker-foxy-account-remove {
       flex: 0 0 auto; background: transparent; border: 1px solid var(--input-focus, #555); border-radius: 4px;
       color: var(--text-main, inherit); cursor: pointer; line-height: 1; padding: 2px 7px;
     }
     .tracker-foxy-account-remove:hover { color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17); }
-    .tracker-foxy-cell.is-checked { background: color-mix(in srgb, var(--text-tab-active, #1fb84f) 25%, transparent); }
-    .tracker-foxy-cell-label { display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    .tracker-foxy-cell-label input[type="checkbox"] { width: 26px; height: 26px; cursor: pointer; }
+    .tracker-foxy-events-row { display: flex; flex-wrap: wrap; gap: 12px; }
     .tracker-foxy-add-account-btn {
-      margin-top: 6px; background: transparent; border: 1px solid var(--input-focus, #555); border-radius: 3px;
+      margin-top: 4px; background: transparent; border: 1px solid var(--input-focus, #555); border-radius: 3px;
       color: var(--text-main, inherit); cursor: pointer; padding: 1px 6px; font-size: 0.72em; line-height: 1.3;
     }
     .tracker-foxy-add-account-btn:hover { color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17); }
@@ -1079,55 +1076,38 @@ function trackerRenderFoxyEvents() {
 
   const accounts = trackerState.foxy.accounts || [];
 
-  const headerCells = TRACKER_FOXY_EVENTS.map((eventItem) => `
-    <th class="tracker-foxy-col-head" title="${trackerEscapeHtml(t(eventItem.nameKey))}">
-      <img src="${eventItem.icon}" alt="${trackerEscapeHtml(t(eventItem.nameKey))}" class="tracker-foxy-th-icon">
-    </th>
-  `).join("");
-
-  const rows = accounts.map((account) => {
-    const cells = TRACKER_FOXY_EVENTS.map((eventItem) => {
+  const blocks = accounts.map((account) => {
+    const items = TRACKER_FOXY_EVENTS.map((eventItem) => {
       const checked = eventItem.id === "foxyQuiz"
         ? trackerGetSharedFoxyQuizWeeklyChecked()
         : !!account.events[eventItem.id];
       const checkedClass = checked ? " is-checked" : "";
 
       return `
-        <td class="tracker-foxy-cell${checkedClass}">
-          <label class="tracker-foxy-cell-label" title="${trackerEscapeHtml(t(eventItem.nameKey))}">
-            <input type="checkbox" data-tracker-foxy-account="${account.id}" data-tracker-foxy-event="${eventItem.id}" ${checked ? "checked" : ""}>
-          </label>
-        </td>
+        <label class="tracker-foxy-item tracker-foxy-item-icon${checkedClass}" title="${trackerEscapeHtml(t(eventItem.nameKey))}">
+          <input type="checkbox" data-tracker-foxy-account="${account.id}" data-tracker-foxy-event="${eventItem.id}" ${checked ? "checked" : ""}>
+          <img src="${eventItem.icon}" alt="${trackerEscapeHtml(t(eventItem.nameKey))}" class="tracker-foxy-banner tracker-foxy-banner-natural">
+        </label>
       `;
     }).join("");
 
     return `
-      <tr class="tracker-foxy-account-row" data-tracker-foxy-account-row="${account.id}">
-        <td class="tracker-foxy-account-name-cell">
+      <div class="tracker-foxy-account-block" data-tracker-foxy-account-row="${account.id}">
+        <div class="tracker-foxy-account-header">
           <input type="text" class="tracker-foxy-account-name-input" data-tracker-foxy-account-name="${account.id}"
                  value="${trackerEscapeHtml(account.name)}"
                  placeholder="${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountPlaceholder", "Nome da conta"))}" maxlength="24">
           ${accounts.length > 1 ? `<button type="button" class="tracker-foxy-account-remove" data-tracker-foxy-account-remove="${account.id}" title="${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountRemove", "Remover conta"))}">&times;</button>` : ""}
-        </td>
-        ${cells}
-      </tr>
+        </div>
+        <div class="tracker-foxy-events-row">
+          ${items}
+        </div>
+      </div>
     `;
   }).join("");
 
   container.innerHTML = `
-    <div class="tracker-foxy-table-wrap">
-      <table class="tracker-foxy-table">
-        <thead>
-          <tr>
-            <th class="tracker-foxy-col-head tracker-foxy-account-head">${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountHeader", "Conta"))}</th>
-            ${headerCells}
-          </tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
-    </div>
+    ${blocks}
     <button type="button" id="tracker-foxy-add-account" class="tracker-foxy-add-account-btn">+ ${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountAdd", "Adicionar conta"))}</button>
   `;
 
