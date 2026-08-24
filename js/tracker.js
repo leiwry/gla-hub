@@ -1033,10 +1033,10 @@ function trackerEnsureFoxyAccountsStyle() {
   style.id = "tracker-foxy-accounts-style";
   style.textContent = `
     .tracker-foxy-table-wrap { overflow-x: auto; width: 100%; }
-    .tracker-foxy-table { border-collapse: collapse; width: 100%; min-width: 420px; }
-    .tracker-foxy-table th, .tracker-foxy-table td { border: 1px solid var(--input-focus, #555); padding: 10px 14px; text-align: center; }
+    .tracker-foxy-table { border-collapse: collapse; width: 100%; min-width: 480px; }
+    .tracker-foxy-table th, .tracker-foxy-table td { border: 1px solid var(--input-focus, #555); padding: 14px 18px; text-align: center; }
     .tracker-foxy-account-head, .tracker-foxy-account-name-cell { text-align: left; min-width: 130px; }
-    .tracker-foxy-th-icon { width: 36px; height: 36px; object-fit: contain; }
+    .tracker-foxy-th-icon { width: 56px; height: 56px; object-fit: contain; }
     .tracker-foxy-account-name-cell { display: flex; align-items: center; gap: 6px; border-top: none; border-bottom: none; }
     .tracker-foxy-account-name-input {
       flex: 1; min-width: 0; background: transparent; border: 1px solid var(--input-focus, #555);
@@ -1049,10 +1049,10 @@ function trackerEnsureFoxyAccountsStyle() {
     .tracker-foxy-account-remove:hover { color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17); }
     .tracker-foxy-cell.is-checked { background: color-mix(in srgb, var(--text-tab-active, #1fb84f) 25%, transparent); }
     .tracker-foxy-cell-label { display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    .tracker-foxy-cell-label input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; }
+    .tracker-foxy-cell-label input[type="checkbox"] { width: 26px; height: 26px; cursor: pointer; }
     .tracker-foxy-add-account-btn {
-      margin-top: 6px; background: transparent; border: 1px solid var(--input-focus, #555); border-radius: 4px;
-      color: var(--text-main, inherit); cursor: pointer; padding: 3px 9px; font-size: 0.82em; line-height: 1.3;
+      margin-top: 6px; background: transparent; border: 1px solid var(--input-focus, #555); border-radius: 3px;
+      color: var(--text-main, inherit); cursor: pointer; padding: 1px 6px; font-size: 0.72em; line-height: 1.3;
     }
     .tracker-foxy-add-account-btn:hover { color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17); }
   `;
