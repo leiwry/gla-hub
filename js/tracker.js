@@ -1032,9 +1032,8 @@ function trackerEnsureFoxyAccountsStyle() {
   const style = document.createElement("style");
   style.id = "tracker-foxy-accounts-style";
   style.textContent = `
-    .tracker-foxy-account-block { margin-bottom: 18px; }
-    .tracker-foxy-account-block + .tracker-foxy-account-block {
-      padding-top: 14px; border-top: 1px solid var(--input-focus, #555);
+    .tracker-foxy-account-block {
+      margin-bottom: 18px; padding-top: 14px; border-top: 1px solid var(--input-focus, #555);
     }
     .tracker-foxy-account-header { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
     .tracker-foxy-account-name-input {
