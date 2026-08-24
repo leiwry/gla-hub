@@ -257,6 +257,33 @@ function trackerCreateDefaultFoxyEvents() {
   return events;
 }
 
+function trackerCreateFoxyAccountId() {
+  return `acc_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function trackerCreateDefaultFoxyAccount(name) {
+  return {
+    id: trackerCreateFoxyAccountId(),
+    name: typeof name === "string" ? name : "",
+    events: trackerCreateDefaultFoxyEvents()
+  };
+}
+
+function trackerNormalizeFoxyAccount(raw) {
+  const account = raw && typeof raw === "object" ? raw : {};
+  const events = trackerCreateDefaultFoxyEvents();
+  const rawEvents = account.events && typeof account.events === "object" ? account.events : {};
+  Object.keys(events).forEach((eventId) => {
+    events[eventId] = !!rawEvents[eventId];
+  });
+
+  return {
+    id: typeof account.id === "string" && account.id ? account.id : trackerCreateFoxyAccountId(),
+    name: typeof account.name === "string" ? account.name : "",
+    events
+  };
+}
+
 function trackerCreateDefaultState() {
   return {
     version: 1,
@@ -271,7 +298,8 @@ function trackerCreateDefaultState() {
     marineford: trackerCreateDefaultMarineford(),
     foxy: {
       resetKey: trackerGetWeeklyResetKey(),
-      events: trackerCreateDefaultFoxyEvents()
+      sharedFoxyQuiz: false,
+      accounts: [trackerCreateDefaultFoxyAccount("")]
     },
     oneManArmy: {
       completed: {}
@@ -305,7 +333,8 @@ function trackerNormalizeState(raw) {
     marineford: trackerCreateDefaultMarineford(),
     foxy: {
       resetKey: defaults.foxy.resetKey,
-      events: trackerCreateDefaultFoxyEvents()
+      sharedFoxyQuiz: false,
+      accounts: []
     },
     oneManArmy: {
       completed: {}
@@ -349,10 +378,27 @@ function trackerNormalizeState(raw) {
 
   const rawFoxy = state.foxy && typeof state.foxy === "object" ? state.foxy : {};
   normalized.foxy.resetKey = typeof rawFoxy.resetKey === "string" ? rawFoxy.resetKey : defaults.foxy.resetKey;
-  const rawEvents = rawFoxy.events && typeof rawFoxy.events === "object" ? rawFoxy.events : {};
-  Object.keys(normalized.foxy.events).forEach((eventId) => {
-    normalized.foxy.events[eventId] = !!rawEvents[eventId];
-  });
+
+  // sharedFoxyQuiz mirrors the weekly quiz checkbox used elsewhere in the app.
+  // Falls back to the old single-account events.foxyQuiz value for migration.
+  const legacyEvents = rawFoxy.events && typeof rawFoxy.events === "object" ? rawFoxy.events : null;
+  normalized.foxy.sharedFoxyQuiz = typeof rawFoxy.sharedFoxyQuiz === "boolean"
+    ? rawFoxy.sharedFoxyQuiz
+    : !!(legacyEvents && legacyEvents.foxyQuiz);
+
+  const rawAccounts = Array.isArray(rawFoxy.accounts) ? rawFoxy.accounts : null;
+  if (rawAccounts && rawAccounts.length) {
+    normalized.foxy.accounts = rawAccounts.map((account) => trackerNormalizeFoxyAccount(account));
+  } else if (legacyEvents) {
+    // Migrate old single-account tracker data into the first account row.
+    const migratedAccount = trackerCreateDefaultFoxyAccount("");
+    Object.keys(migratedAccount.events).forEach((eventId) => {
+      migratedAccount.events[eventId] = !!legacyEvents[eventId];
+    });
+    normalized.foxy.accounts = [migratedAccount];
+  } else {
+    normalized.foxy.accounts = [trackerCreateDefaultFoxyAccount("")];
+  }
 
   const rawOma = state.oneManArmy && state.oneManArmy.completed && typeof state.oneManArmy.completed === "object"
     ? state.oneManArmy.completed
@@ -382,8 +428,11 @@ function trackerApplyWeeklyResets() {
 
   if (trackerState.foxy && trackerState.foxy.resetKey !== resetKey) {
     trackerState.foxy.resetKey = resetKey;
-    Object.keys(trackerState.foxy.events).forEach((eventId) => {
-      trackerState.foxy.events[eventId] = false;
+    trackerState.foxy.sharedFoxyQuiz = false;
+    (trackerState.foxy.accounts || []).forEach((account) => {
+      Object.keys(account.events).forEach((eventId) => {
+        account.events[eventId] = false;
+      });
     });
   }
 
@@ -972,39 +1021,152 @@ function trackerMarinefordKey(id, wave) {
   return `${id}_${wave}`;
 }
 
+function trackerFoxyText(key, fallback) {
+  const value = typeof t === "function" ? t(key) : null;
+  return (!value || value === key) ? fallback : value;
+}
+
+function trackerEnsureFoxyAccountsStyle() {
+  if (document.getElementById("tracker-foxy-accounts-style")) return;
+
+  const style = document.createElement("style");
+  style.id = "tracker-foxy-accounts-style";
+  style.textContent = `
+    .tracker-foxy-table-wrap { overflow-x: auto; width: 100%; }
+    .tracker-foxy-table { border-collapse: collapse; width: 100%; min-width: 420px; }
+    .tracker-foxy-table th, .tracker-foxy-table td { border: 1px solid var(--input-focus, #555); padding: 6px 8px; text-align: center; }
+    .tracker-foxy-account-head, .tracker-foxy-account-name-cell { text-align: left; min-width: 130px; }
+    .tracker-foxy-th-icon { width: 28px; height: 28px; object-fit: contain; }
+    .tracker-foxy-account-name-cell { display: flex; align-items: center; gap: 6px; border-top: none; border-bottom: none; }
+    .tracker-foxy-account-name-input {
+      flex: 1; min-width: 0; background: transparent; border: 1px solid var(--input-focus, #555);
+      border-radius: 4px; padding: 4px 6px; color: var(--text-main, inherit); font: inherit;
+    }
+    .tracker-foxy-account-remove {
+      flex: 0 0 auto; background: transparent; border: 1px solid var(--input-focus, #555); border-radius: 4px;
+      color: var(--text-main, inherit); cursor: pointer; line-height: 1; padding: 2px 7px;
+    }
+    .tracker-foxy-account-remove:hover { color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17); }
+    .tracker-foxy-cell.is-checked { background: color-mix(in srgb, var(--text-tab-active, #1fb84f) 25%, transparent); }
+    .tracker-foxy-cell-label { display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .tracker-foxy-add-account-btn {
+      margin-top: 8px; background: transparent; border: 1px solid var(--input-focus, #555); border-radius: 4px;
+      color: var(--text-main, inherit); cursor: pointer; padding: 5px 12px; font: inherit;
+    }
+    .tracker-foxy-add-account-btn:hover { color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17); }
+  `;
+  document.head.appendChild(style);
+}
+
 function trackerRenderFoxyEvents() {
   const container = document.getElementById("tracker-foxy-events");
   if (!container) return;
 
-  container.innerHTML = TRACKER_FOXY_EVENTS.map((eventItem) => {
-    const checked = eventItem.id === "foxyQuiz"
-      ? trackerGetSharedFoxyQuizWeeklyChecked()
-      : !!trackerState.foxy.events[eventItem.id];
-    const checkedClass = checked ? " is-checked" : "";
+  trackerEnsureFoxyAccountsStyle();
+
+  const accounts = trackerState.foxy.accounts || [];
+
+  const headerCells = TRACKER_FOXY_EVENTS.map((eventItem) => `
+    <th class="tracker-foxy-col-head" title="${trackerEscapeHtml(t(eventItem.nameKey))}">
+      <img src="${eventItem.icon}" alt="${trackerEscapeHtml(t(eventItem.nameKey))}" class="tracker-foxy-th-icon">
+    </th>
+  `).join("");
+
+  const rows = accounts.map((account) => {
+    const cells = TRACKER_FOXY_EVENTS.map((eventItem) => {
+      const checked = eventItem.id === "foxyQuiz"
+        ? trackerGetSharedFoxyQuizWeeklyChecked()
+        : !!account.events[eventItem.id];
+      const checkedClass = checked ? " is-checked" : "";
+
+      return `
+        <td class="tracker-foxy-cell${checkedClass}">
+          <label class="tracker-foxy-cell-label" title="${trackerEscapeHtml(t(eventItem.nameKey))}">
+            <input type="checkbox" data-tracker-foxy-account="${account.id}" data-tracker-foxy-event="${eventItem.id}" ${checked ? "checked" : ""}>
+          </label>
+        </td>
+      `;
+    }).join("");
 
     return `
-      <label class="tracker-foxy-item tracker-foxy-item-icon${checkedClass}" title="${trackerEscapeHtml(t(eventItem.nameKey))}">
-        <input type="checkbox" data-tracker-foxy-event="${eventItem.id}" ${checked ? "checked" : ""}>
-        <img src="${eventItem.icon}" alt="${trackerEscapeHtml(t(eventItem.nameKey))}" class="tracker-foxy-banner tracker-foxy-banner-natural">
-      </label>
+      <tr class="tracker-foxy-account-row" data-tracker-foxy-account-row="${account.id}">
+        <td class="tracker-foxy-account-name-cell">
+          <input type="text" class="tracker-foxy-account-name-input" data-tracker-foxy-account-name="${account.id}"
+                 value="${trackerEscapeHtml(account.name)}"
+                 placeholder="${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountPlaceholder", "Nome da conta"))}" maxlength="24">
+          ${accounts.length > 1 ? `<button type="button" class="tracker-foxy-account-remove" data-tracker-foxy-account-remove="${account.id}" title="${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountRemove", "Remover conta"))}">&times;</button>` : ""}
+        </td>
+        ${cells}
+      </tr>
     `;
   }).join("");
 
+  container.innerHTML = `
+    <div class="tracker-foxy-table-wrap">
+      <table class="tracker-foxy-table">
+        <thead>
+          <tr>
+            <th class="tracker-foxy-col-head tracker-foxy-account-head">${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountHeader", "Conta"))}</th>
+            ${headerCells}
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+    <button type="button" id="tracker-foxy-add-account" class="tracker-foxy-add-account-btn">+ ${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountAdd", "Adicionar conta"))}</button>
+  `;
+
   container.querySelectorAll("[data-tracker-foxy-event]").forEach((checkbox) => {
     checkbox.addEventListener("change", () => {
+      const accountId = checkbox.getAttribute("data-tracker-foxy-account");
       const eventId = checkbox.getAttribute("data-tracker-foxy-event");
+
       if (eventId === "foxyQuiz") {
         trackerSetSharedFoxyQuizWeeklyChecked(!!checkbox.checked);
         trackerRenderFoxyEvents();
         return;
       }
 
-      if (!Object.prototype.hasOwnProperty.call(trackerState.foxy.events, eventId)) return;
-      trackerState.foxy.events[eventId] = !!checkbox.checked;
+      const account = accounts.find((a) => a.id === accountId);
+      if (!account || !Object.prototype.hasOwnProperty.call(account.events, eventId)) return;
+      account.events[eventId] = !!checkbox.checked;
       trackerRenderFoxyEvents();
       if (typeof autoSaveBuild === "function") autoSaveBuild();
     });
   });
+
+  container.querySelectorAll("[data-tracker-foxy-account-name]").forEach((input) => {
+    input.addEventListener("input", () => {
+      const accountId = input.getAttribute("data-tracker-foxy-account-name");
+      const account = accounts.find((a) => a.id === accountId);
+      if (!account) return;
+      account.name = input.value;
+      if (typeof autoSaveBuild === "function") autoSaveBuild();
+    });
+  });
+
+  container.querySelectorAll("[data-tracker-foxy-account-remove]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const accountId = btn.getAttribute("data-tracker-foxy-account-remove");
+      trackerState.foxy.accounts = accounts.filter((a) => a.id !== accountId);
+      if (!trackerState.foxy.accounts.length) {
+        trackerState.foxy.accounts.push(trackerCreateDefaultFoxyAccount(""));
+      }
+      trackerRenderFoxyEvents();
+      if (typeof autoSaveBuild === "function") autoSaveBuild();
+    });
+  });
+
+  const addBtn = document.getElementById("tracker-foxy-add-account");
+  if (addBtn) {
+    addBtn.addEventListener("click", () => {
+      trackerState.foxy.accounts.push(trackerCreateDefaultFoxyAccount(""));
+      trackerRenderFoxyEvents();
+      if (typeof autoSaveBuild === "function") autoSaveBuild();
+    });
+  }
 }
 
 function trackerGetUnlockedCharactersForOma() {
@@ -1113,12 +1275,12 @@ function resetTrackerState() {
 
 function trackerGetSharedFoxyQuizWeeklyChecked() {
   trackerEnsureState();
-  return !!trackerState.foxy.events.foxyQuiz;
+  return !!trackerState.foxy.sharedFoxyQuiz;
 }
 
 function trackerSetSharedFoxyQuizWeeklyChecked(checked, options = {}) {
   trackerEnsureState();
-  trackerState.foxy.events.foxyQuiz = !!checked;
+  trackerState.foxy.sharedFoxyQuiz = !!checked;
 
   if (!options.silent && typeof autoSaveBuild === "function") {
     autoSaveBuild();
