@@ -1077,9 +1077,7 @@ function trackerRenderFoxyEvents() {
 
   const blocks = accounts.map((account) => {
     const items = TRACKER_FOXY_EVENTS.map((eventItem) => {
-      const checked = eventItem.id === "foxyQuiz"
-        ? trackerGetSharedFoxyQuizWeeklyChecked()
-        : !!account.events[eventItem.id];
+      const checked = !!account.events[eventItem.id];
       const checkedClass = checked ? " is-checked" : "";
 
       return `
@@ -1122,12 +1120,6 @@ function trackerRenderFoxyEvents() {
     checkbox.addEventListener("change", () => {
       const accountId = checkbox.getAttribute("data-tracker-foxy-account");
       const eventId = checkbox.getAttribute("data-tracker-foxy-event");
-
-      if (eventId === "foxyQuiz") {
-        trackerSetSharedFoxyQuizWeeklyChecked(!!checkbox.checked);
-        trackerRenderFoxyEvents();
-        return;
-      }
 
       const account = (trackerState.foxy.accounts || []).find((a) => a.id === accountId);
       if (!account || !Object.prototype.hasOwnProperty.call(account.events, eventId)) return;
