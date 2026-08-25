@@ -5,14 +5,14 @@
 /* CARD */
 
 .card {
-  background: var(--card-bg, #ffffff);
-  border: 2px solid var(--card-border, #999999);
+  background: var(--card-bg, var(--bg-panel));
+  border: 2px solid var(--card-border, var(--border-accent));
   padding: 10px;
   border-radius: 6px;
 }
 
 .cardHeader b {
-  color: var(--card-title, #000000);
+  color: var(--card-title, var(--text-title));
   font-weight: bold;
 }
 
@@ -44,8 +44,8 @@
 }
 
 .variantSelector {
-  background: #2a1a0e;
-  border: 2px solid #6a4a20;
+  background: var(--bg-panel);
+  border: 2px solid var(--border-accent);
   border-radius: 8px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
   padding: 8px;
@@ -62,8 +62,8 @@
 }
 
 .variantItem {
-  background: #3a2410;
-  border: 1px solid #6a4a20;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-accent);
   border-radius: 6px;
   width: 56px;
   height: 56px;
@@ -81,15 +81,15 @@
 }
 
 .variantItem:hover {
-  background: #4a2e14;
-  border-color: #b78d4b;
+  background: var(--bg-surface-2);
+  border-color: var(--input-focus);
   transform: translateY(-1px);
 }
 
 .variantBtn {
-  background: linear-gradient(180deg, #6d4b1e 0%, #4a2e14 100%);
-  border: 1.5px solid #b78d4b;
-  color: #f5dfc8;
+  background: linear-gradient(180deg, var(--bg-surface-2) 0%, var(--bg-surface-1) 100%);
+  border: 1.5px solid var(--input-focus);
+  color: var(--input-text);
   cursor: pointer;
   border-radius: 6px;
   padding: 2px 7px;
@@ -101,8 +101,8 @@
 }
 
 .variantBtn:hover {
-  background: linear-gradient(180deg, #7a5522 0%, #5a3818 100%);
-  border-color: #d4a96a;
+  background: linear-gradient(180deg, var(--bg-tab-active) 0%, var(--bg-surface-2) 100%);
+  border-color: var(--input-focus);
   transform: translateY(-1px);
 }
 
@@ -120,7 +120,7 @@
 .statLabel {
   flex: 0 0 60px;
   font-size: 13px;
-  color: #f0e0b0;
+  color: var(--text-title);
 }
 
 .statBtnGroup {
@@ -136,9 +136,9 @@
   min-width: 70px;
   height: 28px;
   padding: 4px 6px;
-  background: #2a1a0e;
-  border: 1px solid #6a4a20;
-  color: #f5dfc8;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--input-text);
   border-radius: 4px;
   font-size: 13px;
   font-family: Verdana;
@@ -152,14 +152,14 @@
 }
 
 .statInput:focus {
-  outline: 2px solid #b78d4b;
+  outline: 2px solid var(--input-focus);
   outline-offset: 1px;
-  border-color: #b78d4b;
-  background: #3a2a1e;
+  border-color: var(--input-focus);
+  background: var(--bg-surface-1);
 }
 
 .statInput::placeholder {
-  color: #6a4020;
+  color: var(--text-muted);
 }
 
 .statInput::-webkit-outer-spin-button,
@@ -178,9 +178,9 @@
   width: 26px;
   height: 28px;
   padding: 3px 0;
-  background: #4a2e14;
-  border: 1px solid #6a4a20;
-  color: #f5dfc8;
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-accent);
+  color: var(--input-text);
   cursor: pointer;
   border-radius: 3px;
   font-size: 14px;
@@ -228,8 +228,8 @@
 }
 
 .statAdjustBtn:hover {
-  background: #5a3818;
-  border-color: #8a6a40;
+  background: var(--bg-tab-active);
+  border-color: var(--input-focus);
 }
 
 .statAdjustBtn:active {
@@ -272,7 +272,7 @@
 
 /* Card rarity coloring (based on stat average) */
 .card.rarity-common {
-  --card-bg: #4a2e14;
+  --card-bg: var(--bg-surface-2);
   --card-border: #d9d9d9;
   --card-title: #ffffff;
 }
