@@ -13,8 +13,8 @@
 /* ITEM HEADER NA TABELA */
 
 .tableItem {
-  background: #2f1c0c;
-  border: 2px solid #6a4a20;
+  background: var(--bg-panel);
+  border: 2px solid var(--border-accent);
   border-radius: 6px;
   padding: 10px;
   display: flex;
@@ -51,7 +51,7 @@
   font-size: 12px;
   text-align: center;
   margin: 10px 0 3px;
-  color: #f0e0b0;
+  color: var(--text-title);
   opacity: 0.85;
   letter-spacing: 0.03em;
 }
@@ -64,13 +64,13 @@
 }
 
 .comboTable th {
-  background: #3a2410;
-  border: 1px solid #6a4a20;
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-accent);
   padding: 4px;
 }
 
 .comboTable td {
-  border: 1px solid #6a4a20;
+  border: 1px solid var(--border-accent);
   padding: 4px;
   text-align: center;
 }
@@ -83,7 +83,7 @@
 .comboReq {
   display: block;
   font-size: 0.85em;
-  color: #ccc;
+  color: var(--text-muted);
 }
 
 .singleStat {
@@ -95,7 +95,7 @@
   align-items: center;
   justify-content: center;
   font-style: italic;
-  color: #cccccc;
+  color: var(--text-muted);
   font-weight: bolder;
   text-align: center;
 }
@@ -121,14 +121,14 @@
 
 .rarityTable th,
 .rarityTable td {
-  border: 1px solid #6a4a20;
+  border: 1px solid var(--border-accent);
   padding: 4px;
   text-align: center;
   font-size: 12px;
 }
 
 .rarityTable th {
-  background: #3a2410;
+  background: var(--bg-surface-2);
 }
 
 .rarityName {
