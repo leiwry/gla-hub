@@ -332,13 +332,15 @@
 }
 
 .boost-total-row {
-  background: var(--text-title) !important;
-  border: 2px solid var(--text-title) !important;
+  background: color-mix(in srgb, var(--border-accent) 55%, black 45%) !important;
+  border: 2px solid var(--border-accent) !important;
   font-weight: bold;
+  color: var(--text-title);
 }
 
 .boost-total-row td {
-  background: var(--text-title) !important;
+  background: color-mix(in srgb, var(--border-accent) 55%, black 45%) !important;
+  color: var(--text-title);
 }
 
 .boost-note {
