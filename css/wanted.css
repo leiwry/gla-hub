@@ -189,10 +189,6 @@
   border-top-color: var(--border-accent);
 }
 
-.wanted-table tbody tr:hover {
-  background: var(--text-title);
-}
-
 .wanted-table th {
   background: var(--bg-surface-1);
   color: var(--text-title);
@@ -775,4 +771,3 @@
   width: 22px;
   height: 22px;
 }
-
