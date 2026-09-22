@@ -152,7 +152,14 @@ function getProfilesStorage() {
 
 function setProfilesStorage(profiles) {
   if (!storage) return;
-  storage.setItem('glacProfiles', JSON.stringify(profiles));
+  try {
+    storage.setItem('glacProfiles', JSON.stringify(profiles));
+  } catch (err) {
+    console.error('Failed to save profiles (storage full?)', err);
+    if (typeof showToast === 'function') {
+      showToast(t('profileStorageFullError') || 'Armazenamento cheio: remova algumas imagens do Tracker e tente novamente.');
+    }
+  }
 }
 
 function getCurrentProfileName() {

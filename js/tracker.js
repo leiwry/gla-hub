@@ -105,20 +105,6 @@ const TRACKER_FOXY_EVENTS = [
   { id: "deathmatch", nameKey: "trackerFoxyDeathmatch", icon: "sprites/tracker/foxy_events/foxy_deathmatch.png" }
 ];
 
-// Weekly Bosses tracker (matches the bosses listed in the Weekly Bosses tab)
-const TRACKER_WEEKLY_BOSSES = [
-  { id: "deathstalker", name: "Deathstalker", icon: "🦂" },
-  { id: "barbarossa", name: "Barbarossa", icon: "🏴‍☠️" },
-  { id: "madera", name: "Madera", icon: "🪵" },
-  { id: "sanshoo", name: "Sanshoo", icon: "🐯" },
-  { id: "hassan", name: "Hassan", icon: "🗡️" },
-  { id: "van_augur", name: "Van Augur", icon: "🎯" },
-  { id: "jesus_burgess", name: "Jesus Burgess", icon: "💪" },
-  { id: "yokozuna", name: "Yokozuna", icon: "🤼" },
-  { id: "humandrill_swordmaster", name: "Humandrill Swordmaster", icon: "🐒" },
-  { id: "duval", name: "Duval", icon: "🐴" }
-];
-
 let trackerSubTabActive = "boss_rush";
 let trackerState = null;
 let trackerBound = false;
@@ -299,6 +285,59 @@ function trackerNormalizeFoxyAccount(raw) {
   };
 }
 
+function trackerCreateWkbId(prefix) {
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function trackerCreateDefaultWkbContent(name) {
+  return {
+    id: trackerCreateWkbId("wkbcnt"),
+    name: typeof name === "string" ? name : "",
+    images: []
+  };
+}
+
+function trackerCreateDefaultWkbAccount(name) {
+  return {
+    id: trackerCreateWkbId("wkbacc"),
+    name: typeof name === "string" ? name : "",
+    contents: [trackerCreateDefaultWkbContent("")]
+  };
+}
+
+function trackerNormalizeWkbImage(raw) {
+  const image = raw && typeof raw === "object" ? raw : {};
+  return {
+    id: typeof image.id === "string" && image.id ? image.id : trackerCreateWkbId("wkbimg"),
+    src: typeof image.src === "string" ? image.src : "",
+    checked: !!image.checked
+  };
+}
+
+function trackerNormalizeWkbContent(raw) {
+  const content = raw && typeof raw === "object" ? raw : {};
+  const images = Array.isArray(content.images)
+    ? content.images.map(trackerNormalizeWkbImage).filter((image) => image.src)
+    : [];
+  return {
+    id: typeof content.id === "string" && content.id ? content.id : trackerCreateWkbId("wkbcnt"),
+    name: typeof content.name === "string" ? content.name : "",
+    images
+  };
+}
+
+function trackerNormalizeWkbAccount(raw) {
+  const account = raw && typeof raw === "object" ? raw : {};
+  const contents = Array.isArray(account.contents)
+    ? account.contents.map(trackerNormalizeWkbContent)
+    : [];
+  return {
+    id: typeof account.id === "string" && account.id ? account.id : trackerCreateWkbId("wkbacc"),
+    name: typeof account.name === "string" ? account.name : "",
+    contents
+  };
+}
+
 function trackerCreateDefaultState() {
   return {
     version: 1,
@@ -318,7 +357,7 @@ function trackerCreateDefaultState() {
     },
     weeklyBosses: {
       resetKey: trackerGetWeeklyResetKey(),
-      completed: {}
+      accounts: [trackerCreateDefaultWkbAccount("")]
     },
     oneManArmy: {
       completed: {}
@@ -357,7 +396,7 @@ function trackerNormalizeState(raw) {
     },
     weeklyBosses: {
       resetKey: defaults.weeklyBosses.resetKey,
-      completed: {}
+      accounts: []
     },
     oneManArmy: {
       completed: {}
@@ -427,12 +466,10 @@ function trackerNormalizeState(raw) {
   normalized.weeklyBosses.resetKey = typeof rawWeeklyBosses.resetKey === "string"
     ? rawWeeklyBosses.resetKey
     : defaults.weeklyBosses.resetKey;
-  const rawWeeklyBossesCompleted = rawWeeklyBosses.completed && typeof rawWeeklyBosses.completed === "object"
-    ? rawWeeklyBosses.completed
-    : {};
-  TRACKER_WEEKLY_BOSSES.forEach((boss) => {
-    normalized.weeklyBosses.completed[boss.id] = !!rawWeeklyBossesCompleted[boss.id];
-  });
+  const rawWkbAccounts = Array.isArray(rawWeeklyBosses.accounts) ? rawWeeklyBosses.accounts : null;
+  normalized.weeklyBosses.accounts = rawWkbAccounts && rawWkbAccounts.length
+    ? rawWkbAccounts.map((account) => trackerNormalizeWkbAccount(account))
+    : [trackerCreateDefaultWkbAccount("")];
 
   const rawOma = state.oneManArmy && state.oneManArmy.completed && typeof state.oneManArmy.completed === "object"
     ? state.oneManArmy.completed
@@ -479,8 +516,12 @@ function trackerApplyWeeklyResets() {
 
   if (trackerState.weeklyBosses && trackerState.weeklyBosses.resetKey !== resetKey) {
     trackerState.weeklyBosses.resetKey = resetKey;
-    TRACKER_WEEKLY_BOSSES.forEach((boss) => {
-      trackerState.weeklyBosses.completed[boss.id] = false;
+    (trackerState.weeklyBosses.accounts || []).forEach((account) => {
+      (account.contents || []).forEach((content) => {
+        (content.images || []).forEach((image) => {
+          image.checked = false;
+        });
+      });
     });
   }
 }
@@ -1203,45 +1244,353 @@ function trackerRenderFoxyEvents() {
   }
 }
 
-function trackerRenderWeeklyBosses() {
-  const listEl = document.getElementById("tracker-wkb-list");
-  const progressEl = document.getElementById("tracker-wkb-progress");
-  const barEl = document.getElementById("tracker-wkb-progressbar");
-  if (!listEl || !progressEl || !barEl) return;
+function trackerEnsureWkbAccountsStyle() {
+  if (document.getElementById("tracker-wkb-accounts-style")) return;
 
-  const completed = trackerState.weeklyBosses.completed;
-  const checkedCount = TRACKER_WEEKLY_BOSSES.reduce((total, boss) => total + (completed[boss.id] ? 1 : 0), 0);
-  const totalCount = TRACKER_WEEKLY_BOSSES.length;
+  const style = document.createElement("style");
+  style.id = "tracker-wkb-accounts-style";
+  style.textContent = `
+    .tracker-wkb-account-block {
+      margin-bottom: 18px; padding-top: 14px; border-top: 1px solid var(--input-focus, #555);
+    }
+    .tracker-wkb-account-header { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+    .tracker-wkb-account-name-input {
+      flex: 0 1 220px; min-width: 0; background: transparent; border: 1px solid var(--input-focus, #555);
+      border-radius: 4px; padding: 4px 8px; color: var(--text-main, inherit); font: inherit; font-weight: 600;
+    }
+    .tracker-wkb-account-remove {
+      flex: 0 0 auto; background: transparent; border: 1px solid var(--input-focus, #555); border-radius: 4px;
+      color: var(--text-main, inherit); cursor: pointer; line-height: 1; padding: 2px 7px;
+    }
+    .tracker-wkb-account-remove:hover { color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17); }
+    .tracker-wkb-contents { display: flex; flex-direction: column; gap: 12px; }
+    .tracker-wkb-content-block {
+      background: rgba(255, 255, 255, 0.03); border: 1px solid var(--input-focus, #555);
+      border-radius: 6px; padding: 10px;
+    }
+    .tracker-wkb-content-header { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+    .tracker-wkb-content-name-input {
+      flex: 1 1 auto; min-width: 0; background: transparent; border: 1px solid var(--input-focus, #555);
+      border-radius: 4px; padding: 3px 7px; color: var(--text-main, inherit); font: inherit;
+    }
+    .tracker-wkb-content-remove {
+      flex: 0 0 auto; background: transparent; border: 1px solid var(--input-focus, #555); border-radius: 4px;
+      color: var(--text-main, inherit); cursor: pointer; line-height: 1; padding: 2px 7px;
+    }
+    .tracker-wkb-content-remove:hover { color: #e05c5c; border-color: #e05c5c; }
+    .tracker-wkb-dropzone {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; min-height: 58px;
+      border: 1px dashed var(--input-focus, #555); border-radius: 6px; padding: 8px;
+      transition: border-color .15s, background-color .15s;
+    }
+    .tracker-wkb-dropzone.is-dragover {
+      border-color: var(--text-title, #d0ab17); background: rgba(208, 171, 23, 0.08);
+    }
+    .tracker-wkb-image-item {
+      position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    }
+    .tracker-wkb-image-item input[type="checkbox"] { width: 14px; height: 14px; cursor: pointer; }
+    .tracker-wkb-image-thumb {
+      width: 38px; height: 38px; object-fit: cover; border-radius: 4px; border: 1px solid var(--input-focus, #555);
+      display: block;
+    }
+    .tracker-wkb-image-item.is-checked .tracker-wkb-image-thumb {
+      border-color: var(--text-title, #d0ab17); box-shadow: 0 0 0 2px rgba(208, 171, 23, 0.35);
+    }
+    .tracker-wkb-image-remove {
+      position: absolute; top: -6px; right: -6px; width: 16px; height: 16px; border-radius: 50%;
+      background: #5f1414; color: #fff; border: none; cursor: pointer; font-size: 10px; line-height: 16px; padding: 0;
+    }
+    .tracker-wkb-image-remove:hover { background: #e05c5c; }
+    .tracker-wkb-add-image-btn {
+      width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+      border: 1px dashed var(--input-focus, #555); border-radius: 4px; background: transparent;
+      color: var(--text-main, inherit); cursor: pointer; font-size: 18px; line-height: 1; margin-top: 17px;
+    }
+    .tracker-wkb-add-image-btn:hover { color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17); }
+    .tracker-wkb-add-content-btn, .tracker-wkb-add-account-btn {
+      margin-top: 4px; background: transparent; border: 1px solid var(--input-focus, #555); border-radius: 3px;
+      color: var(--text-main, inherit); cursor: pointer; padding: 1px 6px; font-size: 0.72em; line-height: 1.3;
+    }
+    .tracker-wkb-add-content-btn:hover, .tracker-wkb-add-account-btn:hover {
+      color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17);
+    }
+    .tracker-wkb-empty-hint { font-size: 0.8em; opacity: 0.7; padding: 6px 2px; }
+  `;
+  document.head.appendChild(style);
+}
 
-  progressEl.textContent = `${checkedCount} / ${totalCount}`;
-  const percent = totalCount > 0 ? (checkedCount / totalCount) * 100 : 0;
-  trackerHandleCompletionCelebration("weeklyBosses", totalCount > 0 && checkedCount === totalCount);
-  const fill = barEl.querySelector("span");
-  if (fill) {
-    fill.style.width = `${percent.toFixed(2)}%`;
-    fill.style.background = trackerGetProgressColor(percent);
+// Reads an image file, center-crops it to a square and downsizes it to keep
+// the saved build (localStorage / share link) small. 76px = 38px display @2x.
+function trackerWkbFileToDataUrl(file) {
+  return new Promise((resolve) => {
+    if (!file || !file.type || file.type.indexOf("image/") !== 0) { resolve(null); return; }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const targetSize = 76;
+        const canvas = document.createElement("canvas");
+        canvas.width = targetSize;
+        canvas.height = targetSize;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) { resolve(e.target.result); return; }
+
+        const side = Math.min(img.width, img.height);
+        const sx = (img.width - side) / 2;
+        const sy = (img.height - side) / 2;
+        ctx.drawImage(img, sx, sy, side, side, 0, 0, targetSize, targetSize);
+
+        try {
+          resolve(canvas.toDataURL("image/jpeg", 0.85));
+        } catch (err) {
+          resolve(e.target.result);
+        }
+      };
+      img.onerror = () => resolve(null);
+      img.src = e.target.result;
+    };
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(file);
+  });
+}
+
+async function trackerWkbAddImagesToContent(contentId, files) {
+  const account = (trackerState.weeklyBosses.accounts || []).find((a) => (a.contents || []).some((c) => c.id === contentId));
+  const content = account && account.contents.find((c) => c.id === contentId);
+  if (!content) return;
+
+  const fileList = Array.from(files || []).filter((f) => f && f.type && f.type.indexOf("image/") === 0);
+  if (!fileList.length) return;
+
+  for (const file of fileList) {
+    const dataUrl = await trackerWkbFileToDataUrl(file);
+    if (dataUrl) {
+      content.images.push({ id: trackerCreateWkbId("wkbimg"), src: dataUrl, checked: false });
+    }
   }
 
-  listEl.innerHTML = TRACKER_WEEKLY_BOSSES.map((boss) => {
-    const isChecked = !!completed[boss.id];
-    const checkedAttr = isChecked ? "checked" : "";
-    const checkedClass = isChecked ? " is-checked" : "";
+  trackerRenderWeeklyBosses();
+  if (typeof autoSaveBuild === "function") autoSaveBuild();
+}
+
+function trackerRenderWeeklyBosses() {
+  const container = document.getElementById("tracker-wkb-accounts");
+  const progressEl = document.getElementById("tracker-wkb-progress");
+  const barEl = document.getElementById("tracker-wkb-progressbar");
+  if (!container) return;
+
+  trackerEnsureWkbAccountsStyle();
+
+  const activeEl = document.activeElement;
+  let refocus = null;
+  if (activeEl && container.contains(activeEl)
+    && (activeEl.matches("[data-tracker-wkb-account-name]") || activeEl.matches("[data-tracker-wkb-content-name]"))) {
+    refocus = {
+      selector: activeEl.matches("[data-tracker-wkb-account-name]")
+        ? `[data-tracker-wkb-account-name="${activeEl.getAttribute("data-tracker-wkb-account-name")}"]`
+        : `[data-tracker-wkb-content-name="${activeEl.getAttribute("data-tracker-wkb-content-name")}"]`,
+      selectionStart: activeEl.selectionStart,
+      selectionEnd: activeEl.selectionEnd
+    };
+  }
+
+  const accounts = trackerState.weeklyBosses.accounts || [];
+  let totalImages = 0;
+  let checkedImages = 0;
+
+  const accountBlocks = accounts.map((account) => {
+    const contentBlocks = (account.contents || []).map((content) => {
+      const imageItems = content.images.map((image) => {
+        totalImages++;
+        if (image.checked) checkedImages++;
+        const checkedClass = image.checked ? " is-checked" : "";
+        return `
+          <div class="tracker-wkb-image-item${checkedClass}" data-tracker-wkb-image-row="${image.id}">
+            <input type="checkbox" data-tracker-wkb-image-check="${image.id}" data-tracker-wkb-content="${content.id}" ${image.checked ? "checked" : ""}>
+            <img src="${image.src}" class="tracker-wkb-image-thumb" alt="">
+            <button type="button" class="tracker-wkb-image-remove" data-tracker-wkb-image-remove="${image.id}" data-tracker-wkb-content-remove-img="${content.id}" title="${trackerEscapeHtml(trackerFoxyText("trackerWkbImageRemove", "Remover imagem"))}">&times;</button>
+          </div>
+        `;
+      }).join("");
+
+      return `
+        <div class="tracker-wkb-content-block" data-tracker-wkb-content-row="${content.id}">
+          <div class="tracker-wkb-content-header">
+            <input type="text" class="tracker-wkb-content-name-input" data-tracker-wkb-content-name="${content.id}"
+                   value="${trackerEscapeHtml(content.name)}"
+                   placeholder="${trackerEscapeHtml(trackerFoxyText("trackerWkbContentPlaceholder", "Nome do conteudo"))}" maxlength="30">
+            <button type="button" class="tracker-wkb-content-remove" data-tracker-wkb-content-remove="${content.id}" title="${trackerEscapeHtml(trackerFoxyText("trackerWkbContentRemove", "Remover conteudo"))}">&times;</button>
+          </div>
+          <div class="tracker-wkb-dropzone" data-tracker-wkb-dropzone="${content.id}">
+            ${imageItems}
+            <label class="tracker-wkb-add-image-btn" title="${trackerEscapeHtml(trackerFoxyText("trackerWkbAddImage", "Adicionar imagem"))}">
+              +
+              <input type="file" accept="image/*" multiple data-tracker-wkb-file-input="${content.id}" hidden>
+            </label>
+          </div>
+        </div>
+      `;
+    }).join("");
+
     return `
-      <label class="tracker-checkbox-item${checkedClass}">
-        <input type="checkbox" data-tracker-wkb-boss="${boss.id}" ${checkedAttr}>
-        <span>${boss.icon} ${trackerEscapeHtml(boss.name)}</span>
-      </label>
+      <div class="tracker-wkb-account-block" data-tracker-wkb-account-row="${account.id}">
+        <div class="tracker-wkb-account-header">
+          <input type="text" class="tracker-wkb-account-name-input" data-tracker-wkb-account-name="${account.id}"
+                 value="${trackerEscapeHtml(account.name)}"
+                 placeholder="${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountPlaceholder", "Nome da conta"))}" maxlength="24">
+          ${accounts.length > 1 ? `<button type="button" class="tracker-wkb-account-remove" data-tracker-wkb-account-remove="${account.id}" title="${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountRemove", "Remover conta"))}">&times;</button>` : ""}
+        </div>
+        <div class="tracker-wkb-contents">
+          ${contentBlocks || `<div class="tracker-wkb-empty-hint">${trackerEscapeHtml(trackerFoxyText("trackerWkbNoContent", "Nenhum conteudo ainda"))}</div>`}
+        </div>
+        <button type="button" class="tracker-wkb-add-content-btn" data-tracker-wkb-add-content="${account.id}">+ ${trackerEscapeHtml(trackerFoxyText("trackerWkbAddContent", "Adicionar conteudo"))}</button>
+      </div>
     `;
   }).join("");
 
-  listEl.querySelectorAll("[data-tracker-wkb-boss]").forEach((checkbox) => {
-    checkbox.addEventListener("change", () => {
-      const bossId = checkbox.getAttribute("data-tracker-wkb-boss");
-      if (!Object.prototype.hasOwnProperty.call(trackerState.weeklyBosses.completed, bossId)) return;
-      trackerState.weeklyBosses.completed[bossId] = !!checkbox.checked;
-      trackerSaveStateAndRender();
+  container.innerHTML = `
+    ${accountBlocks}
+    <button type="button" id="tracker-wkb-add-account" class="tracker-wkb-add-account-btn">+ ${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountAdd", "Adicionar conta"))}</button>
+  `;
+
+  if (progressEl) progressEl.textContent = `${checkedImages} / ${totalImages}`;
+  if (barEl) {
+    const percent = totalImages > 0 ? (checkedImages / totalImages) * 100 : 0;
+    trackerHandleCompletionCelebration("weeklyBosses", totalImages > 0 && checkedImages === totalImages);
+    const fill = barEl.querySelector("span");
+    if (fill) {
+      fill.style.width = `${percent.toFixed(2)}%`;
+      fill.style.background = trackerGetProgressColor(percent);
+    }
+  }
+
+  if (refocus) {
+    const newInput = container.querySelector(refocus.selector);
+    if (newInput) {
+      newInput.focus();
+      try { newInput.setSelectionRange(refocus.selectionStart, refocus.selectionEnd); } catch (e) { /* ignore */ }
+    }
+  }
+
+  container.querySelectorAll("[data-tracker-wkb-account-name]").forEach((input) => {
+    input.addEventListener("input", () => {
+      const accountId = input.getAttribute("data-tracker-wkb-account-name");
+      const account = (trackerState.weeklyBosses.accounts || []).find((a) => a.id === accountId);
+      if (!account) return;
+      account.name = input.value;
+      if (typeof autoSaveBuild === "function") autoSaveBuild();
     });
   });
+
+  container.querySelectorAll("[data-tracker-wkb-content-name]").forEach((input) => {
+    input.addEventListener("input", () => {
+      const contentId = input.getAttribute("data-tracker-wkb-content-name");
+      const account = (trackerState.weeklyBosses.accounts || []).find((a) => (a.contents || []).some((c) => c.id === contentId));
+      const content = account && account.contents.find((c) => c.id === contentId);
+      if (!content) return;
+      content.name = input.value;
+      if (typeof autoSaveBuild === "function") autoSaveBuild();
+    });
+  });
+
+  container.querySelectorAll("[data-tracker-wkb-account-remove]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const accountId = btn.getAttribute("data-tracker-wkb-account-remove");
+      trackerState.weeklyBosses.accounts = (trackerState.weeklyBosses.accounts || []).filter((a) => a.id !== accountId);
+      if (!trackerState.weeklyBosses.accounts.length) {
+        trackerState.weeklyBosses.accounts.push(trackerCreateDefaultWkbAccount(""));
+      }
+      trackerRenderWeeklyBosses();
+      if (typeof autoSaveBuild === "function") autoSaveBuild();
+    });
+  });
+
+  container.querySelectorAll("[data-tracker-wkb-content-remove]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const contentId = btn.getAttribute("data-tracker-wkb-content-remove");
+      const account = (trackerState.weeklyBosses.accounts || []).find((a) => (a.contents || []).some((c) => c.id === contentId));
+      if (!account) return;
+      account.contents = account.contents.filter((c) => c.id !== contentId);
+      trackerRenderWeeklyBosses();
+      if (typeof autoSaveBuild === "function") autoSaveBuild();
+    });
+  });
+
+  container.querySelectorAll("[data-tracker-wkb-add-content]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const accountId = btn.getAttribute("data-tracker-wkb-add-content");
+      const account = (trackerState.weeklyBosses.accounts || []).find((a) => a.id === accountId);
+      if (!account) return;
+      account.contents.push(trackerCreateDefaultWkbContent(""));
+      trackerRenderWeeklyBosses();
+      if (typeof autoSaveBuild === "function") autoSaveBuild();
+    });
+  });
+
+  container.querySelectorAll("[data-tracker-wkb-image-check]").forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+      const imageId = checkbox.getAttribute("data-tracker-wkb-image-check");
+      const contentId = checkbox.getAttribute("data-tracker-wkb-content");
+      const account = (trackerState.weeklyBosses.accounts || []).find((a) => (a.contents || []).some((c) => c.id === contentId));
+      const content = account && account.contents.find((c) => c.id === contentId);
+      const image = content && content.images.find((img) => img.id === imageId);
+      if (!image) return;
+      image.checked = !!checkbox.checked;
+      trackerRenderWeeklyBosses();
+      if (typeof autoSaveBuild === "function") autoSaveBuild();
+    });
+  });
+
+  container.querySelectorAll("[data-tracker-wkb-image-remove]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const imageId = btn.getAttribute("data-tracker-wkb-image-remove");
+      const contentId = btn.getAttribute("data-tracker-wkb-content-remove-img");
+      const account = (trackerState.weeklyBosses.accounts || []).find((a) => (a.contents || []).some((c) => c.id === contentId));
+      const content = account && account.contents.find((c) => c.id === contentId);
+      if (!content) return;
+      content.images = content.images.filter((img) => img.id !== imageId);
+      trackerRenderWeeklyBosses();
+      if (typeof autoSaveBuild === "function") autoSaveBuild();
+    });
+  });
+
+  container.querySelectorAll("[data-tracker-wkb-file-input]").forEach((input) => {
+    input.addEventListener("change", () => {
+      const contentId = input.getAttribute("data-tracker-wkb-file-input");
+      trackerWkbAddImagesToContent(contentId, input.files);
+      input.value = "";
+    });
+  });
+
+  container.querySelectorAll("[data-tracker-wkb-dropzone]").forEach((zone) => {
+    const contentId = zone.getAttribute("data-tracker-wkb-dropzone");
+    zone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      zone.classList.add("is-dragover");
+    });
+    zone.addEventListener("dragleave", () => {
+      zone.classList.remove("is-dragover");
+    });
+    zone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      zone.classList.remove("is-dragover");
+      const files = e.dataTransfer && e.dataTransfer.files;
+      if (files && files.length) {
+        trackerWkbAddImagesToContent(contentId, files);
+      }
+    });
+  });
+
+  const addAccountBtn = document.getElementById("tracker-wkb-add-account");
+  if (addAccountBtn) {
+    addAccountBtn.addEventListener("click", () => {
+      trackerState.weeklyBosses.accounts.push(trackerCreateDefaultWkbAccount(""));
+      trackerRenderWeeklyBosses();
+      if (typeof autoSaveBuild === "function") autoSaveBuild();
+    });
+  }
 }
 
 function trackerGetUnlockedCharactersForOma() {
