@@ -1279,7 +1279,7 @@ function trackerEnsureWkbAccountsStyle() {
     }
     .tracker-wkb-content-remove:hover { color: #e05c5c; border-color: #e05c5c; }
     .tracker-wkb-dropzone {
-      display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; min-height: 58px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; align-items: start; min-height: 58px;
       border: 1px dashed var(--input-focus, #555); border-radius: 6px; padding: 8px;
       transition: border-color .15s, background-color .15s;
     }
@@ -1287,11 +1287,11 @@ function trackerEnsureWkbAccountsStyle() {
       border-color: var(--text-title, #d0ab17); background: rgba(208, 171, 23, 0.08);
     }
     .tracker-wkb-image-item {
-      position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px;
+      position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; width: 100%;
     }
-    .tracker-wkb-image-item input[type="checkbox"] { width: 14px; height: 14px; cursor: pointer; }
+    .tracker-wkb-image-item input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; }
     .tracker-wkb-image-thumb {
-      width: 56px; height: 56px; object-fit: cover; border-radius: 4px; border: 1px solid var(--input-focus, #555);
+      width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 4px; border: 1px solid var(--input-focus, #555);
       display: block;
     }
     .tracker-wkb-image-item.is-checked .tracker-wkb-image-thumb {
@@ -1303,9 +1303,9 @@ function trackerEnsureWkbAccountsStyle() {
     }
     .tracker-wkb-image-remove:hover { background: #e05c5c; }
     .tracker-wkb-add-image-btn {
-      width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
+      grid-column: span 1; width: 100%; height: 30px; display: flex; align-items: center; justify-content: center;
       border: 1px dashed var(--input-focus, #555); border-radius: 4px; background: transparent;
-      color: var(--text-main, inherit); cursor: pointer; font-size: 22px; line-height: 1; margin-top: 17px;
+      color: var(--text-main, inherit); cursor: pointer; font-size: 16px; line-height: 1; margin-top: 0; align-self: end;
     }
     .tracker-wkb-add-image-btn:hover { color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17); }
     .tracker-wkb-add-content-btn, .tracker-wkb-add-account-btn {
