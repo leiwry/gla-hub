@@ -53,6 +53,15 @@
     <link rel="stylesheet" href="css/weekly_chest.css" />
     <link rel="stylesheet" href="css/profiles.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css" />
+    <style>
+      .tracker-subtab-icon-img {
+        width: 1.1em;
+        height: 1.1em;
+        object-fit: contain;
+        vertical-align: -0.15em;
+        image-rendering: pixelated;
+      }
+    </style>
   </head>
 
   <body>
@@ -873,6 +882,10 @@
                 <span class="tracker-subtab-icon" aria-hidden="true">🏅</span>
                 <span data-lang="trackerSubtabOneManArmy">One Man Army</span>
               </button>
+              <button type="button" id="tracker-subtab-btn-weekly-bosses" class="tracker-subtab-btn" data-tracker-subtab="weekly_bosses" role="tab" aria-controls="tracker-subtab-weekly-bosses" aria-selected="false" onclick="switchTrackerSubTab('weekly_bosses', this)">
+                <img src="sprites/tracker/weekly_bosses/skull_icon.png" alt="" class="tracker-subtab-icon tracker-subtab-icon-img" aria-hidden="true">
+                <span data-lang="trackerSubtabWeeklyBosses">Bosses Semanais</span>
+              </button>
             </div>
 
             <div id="tracker-subtab-boss-rush" class="tracker-subtab-panel active" role="tabpanel">
@@ -920,6 +933,18 @@
                 <span id="tracker-oma-progress" class="tracker-progress-badge">0 / 0</span>
               </div>
               <div id="tracker-oma-list" class="tracker-oma-list"></div>
+            </div>
+
+            <div id="tracker-subtab-weekly-bosses" class="tracker-subtab-panel" role="tabpanel" style="display: none">
+              <section class="tracker-box">
+                <div class="tracker-box-head">
+                  <h4 data-lang="trackerWeeklyBossesTitle">Bosses Semanais</h4>
+                  <span id="tracker-wkb-progress" class="tracker-progress-badge">0 / 10</span>
+                </div>
+                <div id="tracker-wkb-progressbar" class="tracker-progressbar" aria-hidden="true"><span></span></div>
+                <small class="tracker-weekly-hint" data-lang="trackerWeeklyHint">Reinicia toda sexta às 00:01 (horário local)</small>
+                <div id="tracker-wkb-list" class="tracker-checkbox-list"></div>
+              </section>
             </div>
           </div>
         </div>
