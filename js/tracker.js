@@ -1263,6 +1263,8 @@ function trackerEnsureWkbAccountsStyle() {
       color: var(--text-main, inherit); cursor: pointer; line-height: 1; padding: 2px 7px;
     }
     .tracker-wkb-account-remove:hover { color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17); }
+    .tracker-wkb-account-header [data-tracker-wkb-account-progress] { flex: 0 0 auto; margin-left: auto; }
+    .tracker-wkb-account-progressbar { margin-bottom: 10px; }
     .tracker-wkb-contents { display: flex; flex-direction: column; gap: 12px; }
     .tracker-wkb-content-block {
       background: rgba(255, 255, 255, 0.03); border: 1px solid var(--input-focus, #555);
@@ -1292,7 +1294,7 @@ function trackerEnsureWkbAccountsStyle() {
     .tracker-wkb-image-item input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; }
     .tracker-wkb-image-thumb {
       width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 4px; border: 1px solid var(--input-focus, #555);
-      display: block;
+      background: var(--bg-surface-1); display: block;
     }
     .tracker-wkb-image-item.is-checked .tracker-wkb-image-thumb {
       border-color: var(--text-title, #d0ab17); box-shadow: 0 0 0 2px rgba(208, 171, 23, 0.35);
@@ -1377,8 +1379,6 @@ async function trackerWkbAddImagesToContent(contentId, files) {
 
 function trackerRenderWeeklyBosses() {
   const container = document.getElementById("tracker-wkb-accounts");
-  const progressEl = document.getElementById("tracker-wkb-progress");
-  const barEl = document.getElementById("tracker-wkb-progressbar");
   if (!container) return;
 
   trackerEnsureWkbAccountsStyle();
@@ -1397,14 +1397,16 @@ function trackerRenderWeeklyBosses() {
   }
 
   const accounts = trackerState.weeklyBosses.accounts || [];
-  let totalImages = 0;
-  let checkedImages = 0;
+  const accountStats = [];
 
   const accountBlocks = accounts.map((account) => {
+    let accTotal = 0;
+    let accChecked = 0;
+
     const contentBlocks = (account.contents || []).map((content) => {
       const imageItems = content.images.map((image) => {
-        totalImages++;
-        if (image.checked) checkedImages++;
+        accTotal++;
+        if (image.checked) accChecked++;
         const checkedClass = image.checked ? " is-checked" : "";
         return `
           <div class="tracker-wkb-image-item${checkedClass}" data-tracker-wkb-image-row="${image.id}">
@@ -1434,14 +1436,18 @@ function trackerRenderWeeklyBosses() {
       `;
     }).join("");
 
+    accountStats.push({ id: account.id, total: accTotal, checked: accChecked });
+
     return `
       <div class="tracker-wkb-account-block" data-tracker-wkb-account-row="${account.id}">
         <div class="tracker-wkb-account-header">
           <input type="text" class="tracker-wkb-account-name-input" data-tracker-wkb-account-name="${account.id}"
                  value="${trackerEscapeHtml(account.name)}"
                  placeholder="${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountPlaceholder", "Nome da conta"))}" maxlength="24">
+          <span class="tracker-progress-badge" data-tracker-wkb-account-progress="${account.id}">${accChecked} / ${accTotal}</span>
           ${accounts.length > 1 ? `<button type="button" class="tracker-wkb-account-remove" data-tracker-wkb-account-remove="${account.id}" title="${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountRemove", "Remover conta"))}">&times;</button>` : ""}
         </div>
+        <div class="tracker-progressbar tracker-wkb-account-progressbar" data-tracker-wkb-account-progressbar="${account.id}" aria-hidden="true"><span></span></div>
         <div class="tracker-wkb-contents">
           ${contentBlocks || `<div class="tracker-wkb-empty-hint">${trackerEscapeHtml(trackerFoxyText("trackerWkbNoContent", "Nenhum conteudo ainda"))}</div>`}
         </div>
@@ -1455,16 +1461,16 @@ function trackerRenderWeeklyBosses() {
     <button type="button" id="tracker-wkb-add-account" class="tracker-wkb-add-account-btn">+ ${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountAdd", "Adicionar conta"))}</button>
   `;
 
-  if (progressEl) progressEl.textContent = `${checkedImages} / ${totalImages}`;
-  if (barEl) {
-    const percent = totalImages > 0 ? (checkedImages / totalImages) * 100 : 0;
-    trackerHandleCompletionCelebration("weeklyBosses", totalImages > 0 && checkedImages === totalImages);
-    const fill = barEl.querySelector("span");
+  accountStats.forEach((stat) => {
+    const percent = stat.total > 0 ? (stat.checked / stat.total) * 100 : 0;
+    trackerHandleCompletionCelebration(`weeklyBosses_${stat.id}`, stat.total > 0 && stat.checked === stat.total);
+    const barEl = container.querySelector(`[data-tracker-wkb-account-progressbar="${stat.id}"]`);
+    const fill = barEl && barEl.querySelector("span");
     if (fill) {
       fill.style.width = `${percent.toFixed(2)}%`;
       fill.style.background = trackerGetProgressColor(percent);
     }
-  }
+  });
 
   if (refocus) {
     const newInput = container.querySelector(refocus.selector);
