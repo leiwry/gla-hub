@@ -105,6 +105,20 @@ const TRACKER_FOXY_EVENTS = [
   { id: "deathmatch", nameKey: "trackerFoxyDeathmatch", icon: "sprites/tracker/foxy_events/foxy_deathmatch.png" }
 ];
 
+// Weekly Bosses tracker (matches the bosses listed in the Weekly Bosses tab)
+const TRACKER_WEEKLY_BOSSES = [
+  { id: "deathstalker", name: "Deathstalker", icon: "🦂" },
+  { id: "barbarossa", name: "Barbarossa", icon: "🏴‍☠️" },
+  { id: "madera", name: "Madera", icon: "🪵" },
+  { id: "sanshoo", name: "Sanshoo", icon: "🐯" },
+  { id: "hassan", name: "Hassan", icon: "🗡️" },
+  { id: "van_augur", name: "Van Augur", icon: "🎯" },
+  { id: "jesus_burgess", name: "Jesus Burgess", icon: "💪" },
+  { id: "yokozuna", name: "Yokozuna", icon: "🤼" },
+  { id: "humandrill_swordmaster", name: "Humandrill Swordmaster", icon: "🐒" },
+  { id: "duval", name: "Duval", icon: "🐴" }
+];
+
 let trackerSubTabActive = "boss_rush";
 let trackerState = null;
 let trackerBound = false;
@@ -114,7 +128,8 @@ let trackerOmaHideNotDone = false;
 let trackerCelebrationReady = false;
 let trackerCelebrationState = {
   modifiers: false,
-  marinefordConquest: false
+  marinefordConquest: false,
+  weeklyBosses: false
 };
 
 function trackerGetFireworkColors() {
@@ -301,6 +316,10 @@ function trackerCreateDefaultState() {
       sharedFoxyQuiz: false,
       accounts: [trackerCreateDefaultFoxyAccount("")]
     },
+    weeklyBosses: {
+      resetKey: trackerGetWeeklyResetKey(),
+      completed: {}
+    },
     oneManArmy: {
       completed: {}
     }
@@ -320,7 +339,7 @@ function trackerNormalizeState(raw) {
 
   const normalized = {
     version: 1,
-    activeSubTab: ["boss_rush", "marineford", "foxy", "one_man_army"].includes(state.activeSubTab)
+    activeSubTab: ["boss_rush", "marineford", "foxy", "weekly_bosses", "one_man_army"].includes(state.activeSubTab)
       ? state.activeSubTab
       : defaults.activeSubTab,
     bossRush: {
@@ -335,6 +354,10 @@ function trackerNormalizeState(raw) {
       resetKey: defaults.foxy.resetKey,
       sharedFoxyQuiz: false,
       accounts: []
+    },
+    weeklyBosses: {
+      resetKey: defaults.weeklyBosses.resetKey,
+      completed: {}
     },
     oneManArmy: {
       completed: {}
@@ -400,6 +423,17 @@ function trackerNormalizeState(raw) {
     normalized.foxy.accounts = [trackerCreateDefaultFoxyAccount("")];
   }
 
+  const rawWeeklyBosses = state.weeklyBosses && typeof state.weeklyBosses === "object" ? state.weeklyBosses : {};
+  normalized.weeklyBosses.resetKey = typeof rawWeeklyBosses.resetKey === "string"
+    ? rawWeeklyBosses.resetKey
+    : defaults.weeklyBosses.resetKey;
+  const rawWeeklyBossesCompleted = rawWeeklyBosses.completed && typeof rawWeeklyBosses.completed === "object"
+    ? rawWeeklyBosses.completed
+    : {};
+  TRACKER_WEEKLY_BOSSES.forEach((boss) => {
+    normalized.weeklyBosses.completed[boss.id] = !!rawWeeklyBossesCompleted[boss.id];
+  });
+
   const rawOma = state.oneManArmy && state.oneManArmy.completed && typeof state.oneManArmy.completed === "object"
     ? state.oneManArmy.completed
     : {};
@@ -440,6 +474,13 @@ function trackerApplyWeeklyResets() {
     trackerState.marineford.resetKey = resetKey;
     ["bosses", "superbosses", "helpers"].forEach((categoryId) => {
       trackerState.marineford[categoryId] = {};
+    });
+  }
+
+  if (trackerState.weeklyBosses && trackerState.weeklyBosses.resetKey !== resetKey) {
+    trackerState.weeklyBosses.resetKey = resetKey;
+    TRACKER_WEEKLY_BOSSES.forEach((boss) => {
+      trackerState.weeklyBosses.completed[boss.id] = false;
     });
   }
 }
@@ -556,7 +597,7 @@ function trackerGetSubTabElements() {
 }
 
 function switchTrackerSubTab(subTab, btn) {
-  const safeSubTab = ["boss_rush", "marineford", "foxy", "one_man_army"].includes(subTab)
+  const safeSubTab = ["boss_rush", "marineford", "foxy", "weekly_bosses", "one_man_army"].includes(subTab)
     ? subTab
     : "boss_rush";
 
@@ -712,6 +753,7 @@ function trackerRender() {
   trackerRenderBossRush();
   trackerRenderMarineford();
   trackerRenderFoxyEvents();
+  trackerRenderWeeklyBosses();
   trackerRenderOneManArmy();
 
   switchTrackerSubTab(trackerSubTabActive, document.getElementById(`tracker-subtab-btn-${trackerSubTabActive.replaceAll("_", "-")}`));
@@ -1159,6 +1201,47 @@ function trackerRenderFoxyEvents() {
       if (typeof autoSaveBuild === "function") autoSaveBuild();
     });
   }
+}
+
+function trackerRenderWeeklyBosses() {
+  const listEl = document.getElementById("tracker-wkb-list");
+  const progressEl = document.getElementById("tracker-wkb-progress");
+  const barEl = document.getElementById("tracker-wkb-progressbar");
+  if (!listEl || !progressEl || !barEl) return;
+
+  const completed = trackerState.weeklyBosses.completed;
+  const checkedCount = TRACKER_WEEKLY_BOSSES.reduce((total, boss) => total + (completed[boss.id] ? 1 : 0), 0);
+  const totalCount = TRACKER_WEEKLY_BOSSES.length;
+
+  progressEl.textContent = `${checkedCount} / ${totalCount}`;
+  const percent = totalCount > 0 ? (checkedCount / totalCount) * 100 : 0;
+  trackerHandleCompletionCelebration("weeklyBosses", totalCount > 0 && checkedCount === totalCount);
+  const fill = barEl.querySelector("span");
+  if (fill) {
+    fill.style.width = `${percent.toFixed(2)}%`;
+    fill.style.background = trackerGetProgressColor(percent);
+  }
+
+  listEl.innerHTML = TRACKER_WEEKLY_BOSSES.map((boss) => {
+    const isChecked = !!completed[boss.id];
+    const checkedAttr = isChecked ? "checked" : "";
+    const checkedClass = isChecked ? " is-checked" : "";
+    return `
+      <label class="tracker-checkbox-item${checkedClass}">
+        <input type="checkbox" data-tracker-wkb-boss="${boss.id}" ${checkedAttr}>
+        <span>${boss.icon} ${trackerEscapeHtml(boss.name)}</span>
+      </label>
+    `;
+  }).join("");
+
+  listEl.querySelectorAll("[data-tracker-wkb-boss]").forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+      const bossId = checkbox.getAttribute("data-tracker-wkb-boss");
+      if (!Object.prototype.hasOwnProperty.call(trackerState.weeklyBosses.completed, bossId)) return;
+      trackerState.weeklyBosses.completed[bossId] = !!checkbox.checked;
+      trackerSaveStateAndRender();
+    });
+  });
 }
 
 function trackerGetUnlockedCharactersForOma() {
