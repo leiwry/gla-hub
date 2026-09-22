@@ -1263,8 +1263,9 @@ function trackerEnsureWkbAccountsStyle() {
       color: var(--text-main, inherit); cursor: pointer; line-height: 1; padding: 2px 7px;
     }
     .tracker-wkb-account-remove:hover { color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17); }
-    .tracker-wkb-account-header [data-tracker-wkb-account-progress] { flex: 0 0 auto; margin-left: auto; }
-    .tracker-wkb-account-progressbar { margin-bottom: 10px; }
+    .tracker-wkb-account-progress-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .tracker-wkb-account-progressbar { flex: 1 1 auto; min-width: 0; margin-bottom: 0; }
+    .tracker-wkb-account-progress-badge { flex: 0 0 auto; min-width: 0; font-size: 11px; padding: 2px 7px; white-space: nowrap; }
     .tracker-wkb-contents { display: flex; flex-direction: column; gap: 12px; }
     .tracker-wkb-content-block {
       background: rgba(255, 255, 255, 0.03); border: 1px solid var(--input-focus, #555);
@@ -1338,6 +1339,13 @@ function trackerWkbFileToDataUrl(file) {
         canvas.height = targetSize;
         const ctx = canvas.getContext("2d");
         if (!ctx) { resolve(e.target.result); return; }
+
+        // JPEG has no alpha channel, so any transparent pixels would otherwise
+        // flatten to black. Paint the current theme's surface color first so
+        // transparent PNGs blend in instead of getting a black backdrop.
+        const themeBg = getComputedStyle(document.documentElement).getPropertyValue("--bg-surface-1").trim();
+        ctx.fillStyle = themeBg || "#000000";
+        ctx.fillRect(0, 0, targetSize, targetSize);
 
         const side = Math.min(img.width, img.height);
         const sx = (img.width - side) / 2;
@@ -1444,10 +1452,12 @@ function trackerRenderWeeklyBosses() {
           <input type="text" class="tracker-wkb-account-name-input" data-tracker-wkb-account-name="${account.id}"
                  value="${trackerEscapeHtml(account.name)}"
                  placeholder="${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountPlaceholder", "Nome da conta"))}" maxlength="24">
-          <span class="tracker-progress-badge" data-tracker-wkb-account-progress="${account.id}">${accChecked} / ${accTotal}</span>
           ${accounts.length > 1 ? `<button type="button" class="tracker-wkb-account-remove" data-tracker-wkb-account-remove="${account.id}" title="${trackerEscapeHtml(trackerFoxyText("trackerFoxyAccountRemove", "Remover conta"))}">&times;</button>` : ""}
         </div>
-        <div class="tracker-progressbar tracker-wkb-account-progressbar" data-tracker-wkb-account-progressbar="${account.id}" aria-hidden="true"><span></span></div>
+        <div class="tracker-wkb-account-progress-row">
+          <div class="tracker-progressbar tracker-wkb-account-progressbar" data-tracker-wkb-account-progressbar="${account.id}" aria-hidden="true"><span></span></div>
+          <span class="tracker-progress-badge tracker-wkb-account-progress-badge" data-tracker-wkb-account-progress="${account.id}">${accChecked} / ${accTotal}</span>
+        </div>
         <div class="tracker-wkb-contents">
           ${contentBlocks || `<div class="tracker-wkb-empty-hint">${trackerEscapeHtml(trackerFoxyText("trackerWkbNoContent", "Nenhum conteudo ainda"))}</div>`}
         </div>
