@@ -1291,7 +1291,7 @@ function trackerEnsureWkbAccountsStyle() {
     }
     .tracker-wkb-image-item input[type="checkbox"] { width: 14px; height: 14px; cursor: pointer; }
     .tracker-wkb-image-thumb {
-      width: 38px; height: 38px; object-fit: cover; border-radius: 4px; border: 1px solid var(--input-focus, #555);
+      width: 56px; height: 56px; object-fit: cover; border-radius: 4px; border: 1px solid var(--input-focus, #555);
       display: block;
     }
     .tracker-wkb-image-item.is-checked .tracker-wkb-image-thumb {
@@ -1303,9 +1303,9 @@ function trackerEnsureWkbAccountsStyle() {
     }
     .tracker-wkb-image-remove:hover { background: #e05c5c; }
     .tracker-wkb-add-image-btn {
-      width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+      width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
       border: 1px dashed var(--input-focus, #555); border-radius: 4px; background: transparent;
-      color: var(--text-main, inherit); cursor: pointer; font-size: 18px; line-height: 1; margin-top: 17px;
+      color: var(--text-main, inherit); cursor: pointer; font-size: 22px; line-height: 1; margin-top: 17px;
     }
     .tracker-wkb-add-image-btn:hover { color: var(--text-title, #d0ab17); border-color: var(--text-title, #d0ab17); }
     .tracker-wkb-add-content-btn, .tracker-wkb-add-account-btn {
@@ -1321,7 +1321,7 @@ function trackerEnsureWkbAccountsStyle() {
 }
 
 // Reads an image file, center-crops it to a square and downsizes it to keep
-// the saved build (localStorage / share link) small. 76px = 38px display @2x.
+// the saved build (localStorage / share link) small. 112px = 56px display @2x.
 function trackerWkbFileToDataUrl(file) {
   return new Promise((resolve) => {
     if (!file || !file.type || file.type.indexOf("image/") !== 0) { resolve(null); return; }
@@ -1330,7 +1330,7 @@ function trackerWkbFileToDataUrl(file) {
     reader.onload = (e) => {
       const img = new Image();
       img.onload = () => {
-        const targetSize = 76;
+        const targetSize = 112;
         const canvas = document.createElement("canvas");
         canvas.width = targetSize;
         canvas.height = targetSize;
