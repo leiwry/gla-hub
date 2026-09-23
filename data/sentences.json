@@ -707,7 +707,7 @@
     "pl": "Przydomek Doc Q, shinigami lub bóg śmierci, bierze się stąd, że lubi igrać z życiem ludzi, tak jak shinigami."
   },
   {
-    "is": true,
+    "is": false,
     "en": "Bepo's current bounty is 500 berry.",
     "pt": "A atual recompensa do Bepo é de 500 berry.",
     "es": "La recompensa actual de Bepo es de 500 berry.",
@@ -1393,7 +1393,7 @@
     "pl": "Benn Beckman urodził się w North Blue."
   },
   {
-    "is": true,
+    "is": false,
     "en": "Boa Hancock is the captain of the Kuja Pirates and the only female member of the Shichibukai.",
     "pt": "Boa Hancock é a capitã das Piratas Kuja e a única mulher membro dos Shichibukai.",
     "es": "Boa Hancock es la capitana de las Piratas Kuja y la única mujer miembro de los Shichibukai.",
@@ -1638,7 +1638,7 @@
     "pl": "Mówi się, że Yasopp potrafi odstrzelić czułki mrówki z bardzo daleka."
   },
   {
-    "is": true,
+    "is": false,
     "en": "Doc Q is the doctor of the Blackbeard Pirates.",
     "pt": "Doc Q é o médico dos Piratas do Barba Negra.",
     "es": "Doc Q es el médico de los Piratas de Barbanegra.",
@@ -1771,7 +1771,7 @@
     "pl": "Foxy urodził się w South Blue."
   },
   {
-    "is": true,
+    "is": false,
     "en": "Franky is the eighth member to join the Straw Hat Crew.",
     "pt": "Franky é o oitavo membro a entrar no Bando dos Chapéus de Palha.",
     "es": "Franky es el octavo miembro en unirse a la Banda de los Sombreros de Paja.",
@@ -2422,7 +2422,7 @@
     "pl": "Smok, z którym walczył Luffy i reszta na Punk Hazard, został sztucznie stworzony przez Vegapunka w laboratorium na Punk Hazard."
   },
   {
-    "is": true,
+    "is": false,
     "en": "The ship that Hancock and the Kuja Pirates sail is called the Perfume Snake.",
     "pt": "O navio que a Hancock e as piratas Kuja navegam é chamado de Perfume Snake.",
     "es": "El barco en el que navegan Hancock y las piratas Kuja se llama Perfume Snake.",
@@ -2898,7 +2898,7 @@
     "pl": "Silvers Rayleigh ma żonę na Archipelagu Sabaody."
   },
   {
-    "is": true,
+    "is": false,
     "en": "Smoker ate the Moku Moku no Mi.",
     "pt": "Smoker comeu a Moku Moku no Mi.",
     "es": "Smoker comió la Moku Moku no Mi.",
@@ -4662,7 +4662,7 @@
     "pl": "Bartolomeo posiada Diabelski Owoc Nikyu Nikyu no Mi."
   },
   {
-    "is": false,
+    "is": true,
     "en": "Basil Hawkins is an infamous pirate from the North Blue known as the Magician and captain of the Hawkins Pirates.",
     "pt": "Basil Hawkins é um pirata infâme do North Blue conhecido como o Mago e capitão dos Piratas do Mago.",
     "es": "Basil Hawkins es un infame pirata del North Blue conocido como el Mago y capitán de los Piratas de Hawkins.",
@@ -4697,7 +4697,7 @@
     "pl": "Benn Beckman nie jest najinteligentniejszą postacią, która pojawiła się w sadze East Blue."
   },
   {
-    "is": false,
+    "is": true,
     "en": "Benn Beckman is the vice-captain of the Red Hair Pirates.",
     "pt": "Benn Beckman é o vice-capitão dos Piratas do Shanks.",
     "es": "Benn Beckman es el vicecapitán de los Piratas de Shanks.",
@@ -4774,7 +4774,7 @@
     "pl": "Buggy i Shanks są w tej samej załodze."
   },
   {
-    "is": false,
+    "is": true,
     "en": "Buggy is the captain of the Buggy Pirates and also co-leader of the Buggy and Alvida Alliance.",
     "pt": "Buggy é capitão do Clown Pirates e também colíder da Aliança do Buggy e Alvida.",
     "es": "Buggy es el capitán de los Piratas de Buggy y también colíder de la Alianza de Buggy y Alvida.",
@@ -4949,7 +4949,7 @@
     "pl": "Doc Q nosi wielką włócznię jako broń."
   },
   {
-    "is": false,
+    "is": true,
     "en": "Doc Q is the doctor for the Whitebeard Pirates.",
     "pt": "Doc Q é o médico dos Piratas do Barba Branca.",
     "es": "Doc Q es el médico de los Piratas de Barbablanca.",
@@ -5229,7 +5229,7 @@
     "pl": "Gura Gura no Mi to Diabelski Owoc typu Logia."
   },
   {
-    "is": false,
+    "is": true,
     "en": "Hancock is the Empress of Amazon Lily, which is why she is called the Pirate Empress.",
     "pt": "Hancock é a Imperatriz do Amazon Lily, motivo pelo qual ela é chamada de Imperatriz Shichibukai.",
     "es": "Hancock es la Emperatriz de Amazon Lily, por lo que es llamada la Emperatriz Pirata.",
@@ -5845,7 +5845,7 @@
     "pl": "Pierwszy znany pocałunek Sanjiego miał miejsce z Violet."
   },
   {
-    "is": false,
+    "is": true,
     "en": "The main ship of the Revolutionary Army is called Viento Granma.",
     "pt": "O principal navio do Exército Revolucionário é chamado de Viento GRANMAR.",
     "es": "El barco principal del Ejército Revolucionario se llama Viento Granma.",
@@ -6118,14 +6118,14 @@
     "pl": "Shanks ma bliznę na prawym oku."
   },
   {
-    "is": false,
+    "is": true,
     "en": "Shanks is a member of the Yonko that govern the New World and is the captain of the Red Hair Pirates.",
     "pt": "Shanks é membro dos Yonko que governam o novo mundo e é o capitão dos piratas do Shanks.",
     "es": "Shanks es un miembro de los Yonko que gobiernan el Nuevo Mundo y es el capitán de los Piratas de Shanks.",
     "pl": "Shanks jest jednym z Yonko rządzących Nowym Światem oraz kapitanem Piratów Shanksa."
   },
   {
-    "is": false,
+    "is": true,
     "en": "Shanks is a member of the Yonko ruling the New World and captain of the Red Hair Pirates.",
     "pt": "Shanks é um membro dos Yonko que governa o Novo Mundo e capitão dos Piratas do Shanks.",
     "es": "Shanks es un miembro de los Yonko que gobierna el Nuevo Mundo y capitán de los Piratas de Shanks.",
@@ -6265,7 +6265,7 @@
     "pl": "Trebol posiadał Diabelski Owoc typu Logia."
   },
   {
-    "is": false,
+    "is": true,
     "en": "Tsuru ate the Woshu Woshu no Mi.",
     "pt": "Tsuru comeu a Washe Washe no Mi.",
     "es": "Tsuru comió la Woshu Woshu no Mi.",
@@ -6279,7 +6279,7 @@
     "pl": "Tsuru urodziła się na East Blue."
   },
   {
-    "is": false,
+    "is": true,
     "en": "Urouge is also known as Mad Monk. He is a pirate from a sky island and captain of the Fallen Monk Pirates.",
     "pt": "Urouge é também conhecido como Mad Monk. Ele é um pirata de uma ilha do céu e capitãp dos Piratas Mad Monk.",
     "es": "Urouge también es conocido como el Monje Loco. Es un pirata de una isla del cielo y capitán de los Piratas del Monje Caído.",
